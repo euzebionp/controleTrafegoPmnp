@@ -1,0 +1,51 @@
+import streamlit as st
+from views import login, drivers, vehicles, fines, dashboard, reports, travels
+import db_handler
+
+# Page configuration
+st.set_page_config(
+    page_title="Sistema de Gestão de Multas",
+    page_icon="🚗",
+    layout="wide"
+)
+
+# Initialize Database
+if 'db_initialized' not in st.session_state:
+    db_handler.init_db()
+    st.session_state['db_initialized'] = True
+
+# Session State for Login
+if 'logged_in' not in st.session_state:
+    st.session_state['logged_in'] = False
+
+def main():
+    if not st.session_state['logged_in']:
+        login.login_page()
+    else:
+        sidebar()
+
+def sidebar():
+    st.sidebar.title("Menu Principal")
+    page = st.sidebar.radio(
+        "Navegação",
+        ["Dashboard", "Cadastro de Motoristas", "Cadastro de Veículos", "Cadastro de Viagens", "Cadastro de Multas", "Relatórios", "Sair"]
+    )
+    
+    if page == "Dashboard":
+        dashboard.dashboard_page()
+    elif page == "Cadastro de Motoristas":
+        drivers.drivers_page()
+    elif page == "Cadastro de Veículos":
+        vehicles.vehicles_page()
+    elif page == "Cadastro de Viagens":
+        travels.travels_page()
+    elif page == "Cadastro de Multas":
+        fines.fines_page()
+    elif page == "Relatórios":
+        reports.reports_page()
+    elif page == "Sair":
+        st.session_state['logged_in'] = False
+        st.rerun()
+
+if __name__ == "__main__":
+    main()
