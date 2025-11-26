@@ -1,5 +1,5 @@
 import streamlit as st
-from views import login, drivers, vehicles, fines, dashboard, reports, travels
+from views import login, drivers, vehicles, fines, dashboard, reports, travels, maintenance
 import db_handler
 
 # Page configuration
@@ -10,9 +10,8 @@ st.set_page_config(
 )
 
 # Initialize Database
-if 'db_initialized' not in st.session_state:
-    db_handler.init_db()
-    st.session_state['db_initialized'] = True
+# Always run init_db to ensure migrations are applied
+db_handler.init_db()
 
 # Session State for Login
 if 'logged_in' not in st.session_state:
@@ -28,7 +27,7 @@ def sidebar():
     st.sidebar.title("Menu Principal")
     page = st.sidebar.radio(
         "Navegação",
-        ["Dashboard", "Cadastro de Motoristas", "Cadastro de Veículos", "Cadastro de Viagens", "Cadastro de Multas", "Relatórios", "Sair"]
+        ["Dashboard", "Cadastro de Motoristas", "Cadastro de Veículos", "Cadastro de Viagens", "Controle de Manutenções", "Cadastro de Multas", "Relatórios", "Sair"]
     )
     
     if page == "Dashboard":
@@ -39,6 +38,8 @@ def sidebar():
         vehicles.vehicles_page()
     elif page == "Cadastro de Viagens":
         travels.travels_page()
+    elif page == "Controle de Manutenções":
+        maintenance.maintenance_page()
     elif page == "Cadastro de Multas":
         fines.fines_page()
     elif page == "Relatórios":

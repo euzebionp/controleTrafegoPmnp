@@ -81,6 +81,9 @@ def travels_page():
             # Destination
             destino = st.text_input("Destino")
             
+            # Distance
+            distancia = st.number_input("Distância Percorrida (Km)", min_value=0.0, step=1.0)
+            
             # Driver Selection
             drivers_df = db_handler.get_drivers()
             if drivers_df.empty:
@@ -122,7 +125,7 @@ def travels_page():
                     hora_saida_str = hora_saida.strftime("%H:%M")
                     
                     success, message = db_handler.add_travel(
-                        str(data), motorista_id, veiculo_id, destino, hora_saida_str
+                        str(data), motorista_id, veiculo_id, destino, hora_saida_str, distancia
                     )
                     if success:
                         st.success(message)
@@ -164,8 +167,8 @@ def travels_page():
                 unique_drivers = travels_df['motorista'].nunique()
                 st.metric("Motoristas Ativos", unique_drivers)
             with col3:
-                unique_vehicles = travels_df['veiculo_placa'].nunique()
-                st.metric("Veículos Utilizados", unique_vehicles)
+                total_km = travels_df['distancia'].sum() if 'distancia' in travels_df.columns else 0
+                st.metric("Km Total Percorrido", f"{total_km:.0f} km")
             
             st.divider()
             
@@ -183,6 +186,7 @@ def travels_page():
                         st.write(f"**📅 Data:** {formatted_date}")
                         st.write(f"**🕐 Hora de Saída:** {row['hora_saida']}")
                         st.write(f"**📍 Destino:** {row['destino']}")
+                        st.write(f"**📏 Distância:** {row['distancia']:.0f} km" if pd.notna(row['distancia']) else "**📏 Distância:** 0 km")
                         st.write(f"**👤 Motorista:** {row['motorista']}")
                         st.write(f"**🚙 Veículo:** {row['veiculo_placa']} - {row['veiculo_modelo']}")
                     
@@ -228,6 +232,9 @@ def travels_page():
                             
                             # Destination
                             edit_destino = st.text_input("Destino", value=travel_data['destino'])
+                            
+                            # Distance
+                            edit_distancia = st.number_input("Distância Percorrida (Km)", min_value=0.0, step=1.0, value=float(travel_data['distancia']))
                             
                             # Driver Selection
                             drivers_df = db_handler.get_drivers()
@@ -278,7 +285,7 @@ def travels_page():
                                 
                                 success, message = db_handler.update_travel(
                                     row['id'], str(edit_data), motorista_id, veiculo_id, 
-                                    edit_destino, hora_saida_str
+                                    edit_destino, hora_saida_str, edit_distancia
                                 )
                                 if success:
                                     st.success(message)

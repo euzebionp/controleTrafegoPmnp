@@ -67,12 +67,13 @@ def vehicles_page():
             modelo = st.text_input("Modelo")
             ano = st.number_input("Ano", min_value=1900, max_value=datetime.datetime.now().year + 1, step=1)
             renavam = st.text_input("Renavam")
+            km_atual = st.number_input("Quilometragem Atual (Km)", min_value=0.0, step=1.0)
             
             submit_button = st.form_submit_button("Salvar")
             
             if submit_button:
                 if placa and modelo and ano and renavam:
-                    success, message = db_handler.add_vehicle(placa, modelo, int(ano), renavam)
+                    success, message = db_handler.add_vehicle(placa, modelo, int(ano), renavam, km_atual)
                     if success:
                         st.success(message)
                         st.rerun()
@@ -114,6 +115,7 @@ def vehicles_page():
                         st.write(f"**Modelo:** {row['modelo']}")
                         st.write(f"**Ano:** {row['ano']}")
                         st.write(f"**Renavam:** {row['renavam']}")
+                        st.write(f"**Km Atual:** {row['km_atual']:.0f} km")
                     
                     with col2:
                         # Edit button
@@ -140,6 +142,7 @@ def vehicles_page():
                             edit_modelo = st.text_input("Modelo", value=row['modelo'])
                             edit_ano = st.number_input("Ano", min_value=1900, max_value=datetime.datetime.now().year + 1, step=1, value=int(row['ano']))
                             edit_renavam = st.text_input("Renavam", value=row['renavam'])
+                            edit_km = st.number_input("Quilometragem Atual", min_value=0.0, step=1.0, value=float(row['km_atual']) if pd.notna(row['km_atual']) else 0.0)
                             
                             col_save, col_cancel = st.columns(2)
                             with col_save:
@@ -149,7 +152,7 @@ def vehicles_page():
                             
                             if save_button:
                                 success, message = db_handler.update_vehicle(
-                                    row['id'], edit_placa, edit_modelo, int(edit_ano), edit_renavam
+                                    row['id'], edit_placa, edit_modelo, int(edit_ano), edit_renavam, edit_km
                                 )
                                 if success:
                                     st.success(message)
