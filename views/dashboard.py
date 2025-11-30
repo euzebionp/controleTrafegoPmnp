@@ -38,6 +38,25 @@ def dashboard_page():
         
         st.divider()
     
+    # Check for maintenance alerts
+    maintenance_alerts = db_handler.get_maintenance_alerts()
+    if not maintenance_alerts.empty:
+        st.divider()
+        st.error(f"🔧 **ALERTA DE MANUTENÇÃO: {len(maintenance_alerts)} veículo(s) precisam de atenção!**")
+        
+        # Display each vehicle alert
+        for index, row in maintenance_alerts.iterrows():
+            km_diff = row['proximo_servico_km'] - row['km_atual']
+            
+            if km_diff < 0:
+                status_msg = f"🔴 **VENCIDA** por {abs(km_diff):.0f} km"
+                st.error(f"**{row['modelo']} ({row['placa']})** - Km Atual: {row['km_atual']:.0f} km - Próxima Revisão: {row['proximo_servico_km']:.0f} km - {status_msg}")
+            else:
+                status_msg = f"⚠️ **Próxima** em {km_diff:.0f} km"
+                st.warning(f"**{row['modelo']} ({row['placa']})** - Km Atual: {row['km_atual']:.0f} km - Próxima Revisão: {row['proximo_servico_km']:.0f} km - {status_msg}")
+        
+        st.divider()
+    
     # Fines data
     df = db_handler.get_fines_df()
     

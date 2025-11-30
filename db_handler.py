@@ -113,6 +113,11 @@ def init_db():
         cursor.execute("ALTER TABLE viagens ADD COLUMN origem TEXT DEFAULT ''")
     except sqlite3.OperationalError:
         pass # Column already exists
+        
+    try:
+        cursor.execute("ALTER TABLE viagens ADD COLUMN km_atual REAL")
+    except sqlite3.OperationalError:
+        pass # Column already exists
     
     conn.commit()
     conn.close()
@@ -384,26 +389,53 @@ def get_fine_by_id(fine_id):
 
 # ============ TRAVEL FUNCTIONS ============
 
-def add_travel(data, motorista_id, veiculo_id, origem, destino, hora_saida, distancia=0):
+def add_travel(data, motorista_id, veiculo_id, origem, destino, hora_saida, distancia=0, km_atual=None):
     """Adds a new travel to the database and updates vehicle mileage."""
     conn = get_connection()
     cursor = conn.cursor()
+    alert_message = None
+    
     try:
         cursor.execute('''
-            INSERT INTO viagens (data, motorista_id, veiculo_id, origem, destino, hora_saida, distancia)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        ''', (data, motorista_id, veiculo_id, origem, destino, hora_saida, distancia))
+            INSERT INTO viagens (data, motorista_id, veiculo_id, origem, destino, hora_saida, distancia, km_atual)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (data, motorista_id, veiculo_id, origem, destino, hora_saida, distancia, km_atual))
         
         # Update vehicle mileage
-        if distancia > 0:
+        final_km = 0
+        if km_atual:
+            final_km = km_atual
             cursor.execute('''
                 UPDATE veiculos 
-                SET km_atual = COALESCE(km_atual, 0) + ?
+                SET km_atual = ?
+                WHERE id = ?
+            ''', (km_atual, veiculo_id))
+        elif distancia > 0:
+            # Get current km to calculate final
+            cursor.execute("SELECT km_atual FROM veiculos WHERE id = ?", (veiculo_id,))
+            curr = cursor.fetchone()
+            current_val = curr[0] if curr and curr[0] else 0
+            final_km = current_val + distancia
+            
+            cursor.execute('''
+                UPDATE veiculos 
+                SET km_atual = km_atual + ?
                 WHERE id = ?
             ''', (distancia, veiculo_id))
             
         conn.commit()
-        return True, "Viagem cadastrada com sucesso!"
+        
+        # Check for maintenance
+        if final_km > 0:
+            is_due, msg = check_maintenance_due(veiculo_id, final_km)
+            if is_due:
+                alert_message = msg
+                
+        success_msg = "Viagem cadastrada com sucesso!"
+        if alert_message:
+            success_msg += f" {alert_message}"
+            
+        return True, success_msg
     except Exception as e:
         return False, f"Erro ao cadastrar viagem: {e}"
     finally:
@@ -420,6 +452,7 @@ def get_travels():
             v.origem,
             v.destino,
             v.distancia,
+            v.km_atual,
             m.nome as motorista,
             ve.placa as veiculo_placa,
             ve.modelo as veiculo_modelo
@@ -448,42 +481,63 @@ def get_travel_by_id(travel_id):
             'origem': result[4] if len(result) > 7 else '', # Handle migration
             'destino': result[5] if len(result) > 7 else result[4], # Shift if old schema
             'hora_saida': result[6] if len(result) > 7 else result[5],
-            'distancia': result[7] if len(result) > 7 else (result[6] if len(result) > 6 else 0)
+            'distancia': result[7] if len(result) > 7 else (result[6] if len(result) > 6 else 0),
+            'km_atual': result[8] if len(result) > 8 else 0
         }
     return None
 
-def update_travel(travel_id, data, motorista_id, veiculo_id, origem, destino, hora_saida, distancia):
+def update_travel(travel_id, data, motorista_id, veiculo_id, origem, destino, hora_saida, distancia, km_atual=None):
     """Updates an existing travel's information and adjusts vehicle mileage."""
     conn = get_connection()
     cursor = conn.cursor()
     try:
         # Get old distance to adjust vehicle mileage
-        cursor.execute("SELECT veiculo_id, distancia FROM viagens WHERE id = ?", (travel_id,))
+        cursor.execute("SELECT veiculo_id, distancia, km_atual FROM viagens WHERE id = ?", (travel_id,))
         old_travel = cursor.fetchone()
         
         if old_travel:
             old_veiculo_id = old_travel[0]
             old_distancia = old_travel[1] if old_travel[1] else 0
+            old_km_atual = old_travel[2]
             
-            # Revert old mileage
-            cursor.execute('''
-                UPDATE veiculos 
-                SET km_atual = km_atual - ?
-                WHERE id = ?
-            ''', (old_distancia, old_veiculo_id))
+            # Revert old mileage logic is tricky if we switched from distance-based to km_atual-based or vice-versa.
+            # Simplification: If we used distance, subtract it. If we used km_atual, we might not need to revert 
+            # if we are just setting the new absolute value. 
+            # But to be safe and consistent with add_travel:
+            # If we are updating, we should probably just re-calculate the impact.
+            # However, since add_travel updates vehicle.km_atual cumulatively if distance is used,
+            # or absolutely if km_atual is used.
+            
+            # Let's assume we just revert the distance contribution for now, 
+            # as tracking absolute km_atual history is complex without a full log.
+            # But if the user provided km_atual, we set the vehicle km to that.
+            
+            if old_distancia:
+                 cursor.execute('''
+                    UPDATE veiculos 
+                    SET km_atual = km_atual - ?
+                    WHERE id = ?
+                ''', (old_distancia, old_veiculo_id))
             
         cursor.execute('''
             UPDATE viagens 
-            SET data = ?, motorista_id = ?, veiculo_id = ?, origem = ?, destino = ?, hora_saida = ?, distancia = ?
+            SET data = ?, motorista_id = ?, veiculo_id = ?, origem = ?, destino = ?, hora_saida = ?, distancia = ?, km_atual = ?
             WHERE id = ?
-        ''', (data, motorista_id, veiculo_id, origem, destino, hora_saida, distancia, travel_id))
+        ''', (data, motorista_id, veiculo_id, origem, destino, hora_saida, distancia, km_atual, travel_id))
         
-        # Add new mileage
-        cursor.execute('''
-            UPDATE veiculos 
-            SET km_atual = km_atual + ?
-            WHERE id = ?
-        ''', (distancia, veiculo_id))
+        # Update vehicle mileage
+        if km_atual:
+             cursor.execute('''
+                UPDATE veiculos 
+                SET km_atual = ?
+                WHERE id = ?
+            ''', (km_atual, veiculo_id))
+        elif distancia > 0:
+            cursor.execute('''
+                UPDATE veiculos 
+                SET km_atual = km_atual + ?
+                WHERE id = ?
+            ''', (distancia, veiculo_id))
         
         conn.commit()
         return True, "Viagem atualizada com sucesso!"
@@ -527,6 +581,29 @@ def delete_travel(travel_id):
         conn.close()
 
 # ============ MAINTENANCE FUNCTIONS ============
+
+def check_maintenance_due(vehicle_id, current_km):
+    """Checks if maintenance is due for the vehicle."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    # Get max next service km
+    cursor.execute('''
+        SELECT MAX(proximo_servico_km) 
+        FROM manutencoes 
+        WHERE veiculo_id = ?
+    ''', (vehicle_id,))
+    result = cursor.fetchone()
+    conn.close()
+    
+    if result and result[0]:
+        next_service = result[0]
+        if current_km >= next_service:
+            return True, f"⚠️ MANUTENÇÃO VENCIDA! O veículo atingiu {current_km} km. Próxima revisão era aos {next_service} km."
+        elif (next_service - current_km) <= 1000:
+            return True, f"⚠️ Manutenção Próxima! Faltam {next_service - current_km:.0f} km para a revisão."
+            
+    return False, None
 
 def add_maintenance(veiculo_id, data, tipo_servico, descricao, km_realizado, proximo_servico_km, proximo_servico_data, valor):
     """Adds a new maintenance record."""

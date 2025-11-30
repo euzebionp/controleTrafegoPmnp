@@ -139,6 +139,9 @@ def travels_page():
                 disabled=len(vehicle_options) == 0
             )
             
+            # Current Mileage (Optional/Alternative to Distance)
+            km_atual_input = st.number_input("Km Atual (Odômetro Final)", min_value=0.0, step=1.0, help="Preencha se souber o odômetro final. Isso atualizará o Km atual do veículo.")
+            
             submit_button = st.form_submit_button("🚗 Cadastrar Viagem", use_container_width=True)
             
             if submit_button:
@@ -149,8 +152,11 @@ def travels_page():
                     veiculo_id = vehicle_options[selected_vehicle]
                     hora_saida_str = hora_saida.strftime("%H:%M")
                     
+                    # If km_atual is provided, we can optionally calculate distance if it was 0?
+                    # But let's just pass it.
+                    
                     success, message = db_handler.add_travel(
-                        str(data), motorista_id, veiculo_id, origem, destino, hora_saida_str, distancia
+                        str(data), motorista_id, veiculo_id, origem, destino, hora_saida_str, distancia, km_atual_input
                     )
                     if success:
                         st.success(message)
@@ -258,6 +264,8 @@ def travels_page():
                         st.write(f"**📍 Origem:** {row.get('origem', '-')}")
                         st.write(f"**📍 Destino:** {row['destino']}")
                         st.write(f"**📏 Distância:** {row['distancia']:.0f} km" if pd.notna(row['distancia']) else "**📏 Distância:** 0 km")
+                        if pd.notna(row.get('km_atual')) and row['km_atual'] > 0:
+                            st.write(f"**🔢 Km Atual:** {row['km_atual']:.0f} km")
                         st.write(f"**👤 Motorista:** {row['motorista']}")
                         st.write(f"**🚙 Veículo:** {row['veiculo_placa']} - {row['veiculo_modelo']}")
                     
@@ -361,6 +369,9 @@ def travels_page():
                                 index=current_vehicle_idx
                             )
                             
+                            val_km_atual = float(travel_data.get('km_atual', 0))
+                            edit_km_atual = st.number_input("Km Atual (Odômetro Final)", min_value=0.0, step=1.0, value=val_km_atual, key=f"edit_km_{row['id']}")
+                            
                             col_save, col_cancel = st.columns(2)
                             with col_save:
                                 save_button = st.form_submit_button("💾 Salvar Alterações")
@@ -374,7 +385,7 @@ def travels_page():
                                 
                                 success, message = db_handler.update_travel(
                                     row['id'], str(edit_data), motorista_id, veiculo_id, 
-                                    edit_origem, edit_destino, hora_saida_str, edit_distancia
+                                    edit_origem, edit_destino, hora_saida_str, edit_distancia, edit_km_atual
                                 )
                                 if success:
                                     st.success(message)
