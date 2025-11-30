@@ -491,53 +491,20 @@ def update_travel(travel_id, data, motorista_id, veiculo_id, origem, destino, ho
     conn = get_connection()
     cursor = conn.cursor()
     try:
-        # Get old distance to adjust vehicle mileage
-        cursor.execute("SELECT veiculo_id, distancia, km_atual FROM viagens WHERE id = ?", (travel_id,))
-        old_travel = cursor.fetchone()
-        
-        if old_travel:
-            old_veiculo_id = old_travel[0]
-            old_distancia = old_travel[1] if old_travel[1] else 0
-            old_km_atual = old_travel[2]
-            
-            # Revert old mileage logic is tricky if we switched from distance-based to km_atual-based or vice-versa.
-            # Simplification: If we used distance, subtract it. If we used km_atual, we might not need to revert 
-            # if we are just setting the new absolute value. 
-            # But to be safe and consistent with add_travel:
-            # If we are updating, we should probably just re-calculate the impact.
-            # However, since add_travel updates vehicle.km_atual cumulatively if distance is used,
-            # or absolutely if km_atual is used.
-            
-            # Let's assume we just revert the distance contribution for now, 
-            # as tracking absolute km_atual history is complex without a full log.
-            # But if the user provided km_atual, we set the vehicle km to that.
-            
-            if old_distancia:
-                 cursor.execute('''
-                    UPDATE veiculos 
-                    SET km_atual = km_atual - ?
-                    WHERE id = ?
-                ''', (old_distancia, old_veiculo_id))
-            
+        # Update the travel record
         cursor.execute('''
             UPDATE viagens 
             SET data = ?, motorista_id = ?, veiculo_id = ?, origem = ?, destino = ?, hora_saida = ?, distancia = ?, km_atual = ?
             WHERE id = ?
         ''', (data, motorista_id, veiculo_id, origem, destino, hora_saida, distancia, km_atual, travel_id))
         
-        # Update vehicle mileage
-        if km_atual:
-             cursor.execute('''
+        # Update vehicle mileage if km_atual is provided
+        if km_atual and km_atual > 0:
+            cursor.execute('''
                 UPDATE veiculos 
                 SET km_atual = ?
                 WHERE id = ?
             ''', (km_atual, veiculo_id))
-        elif distancia > 0:
-            cursor.execute('''
-                UPDATE veiculos 
-                SET km_atual = km_atual + ?
-                WHERE id = ?
-            ''', (distancia, veiculo_id))
         
         conn.commit()
         return True, "Viagem atualizada com sucesso!"

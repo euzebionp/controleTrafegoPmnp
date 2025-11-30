@@ -313,25 +313,12 @@ def travels_page():
                             edit_origem = st.text_input("Origem", value=travel_data.get('origem', ''))
                             edit_destino = st.text_input("Destino", value=travel_data['destino'])
                             
-                            # Auto-calc logic for edit
-                            if edit_origem and edit_destino:
-                                key_edit = f"edit-{edit_origem}-{edit_destino}"
-                                if st.session_state.get('last_calc_key_edit') != key_edit:
-                                     # Only auto-calc if user changed something, otherwise keep DB value
-                                     # This is tricky in Edit mode. We don't want to overwrite manual edits unless requested.
-                                     # Let's add a button for explicit calc in edit mode
-                                     pass
-                            
-                            if st.button("🔄 Recalcular Distância", key=f"recalc_{row['id']}"):
-                                dist = utils_geo.calculate_distance(edit_origem, edit_destino)
-                                if dist:
-                                    st.session_state[f"calc_dist_{row['id']}"] = dist
-                                    st.toast(f"Distância recalculada: {dist} km")
-                            
-                            val_dist = st.session_state.get(f"calc_dist_{row['id']}", float(travel_data['distancia']))
-                            
                             # Distance
-                            edit_distancia = st.number_input("Distância Percorrida (Km)", min_value=0.0, step=1.0, value=val_dist)
+                            try:
+                                dist_value = float(travel_data.get('distancia', 0))
+                            except (ValueError, TypeError):
+                                dist_value = 0.0
+                            edit_distancia = st.number_input("Distância Percorrida (Km)", min_value=0.0, step=1.0, value=dist_value)
                             
                             # Driver Selection
                             drivers_df = db_handler.get_drivers()
@@ -369,7 +356,10 @@ def travels_page():
                                 index=current_vehicle_idx
                             )
                             
-                            val_km_atual = float(travel_data.get('km_atual', 0))
+                            try:
+                                val_km_atual = float(travel_data.get('km_atual', 0))
+                            except (ValueError, TypeError):
+                                val_km_atual = 0.0
                             edit_km_atual = st.number_input("Km Atual (Odômetro Final)", min_value=0.0, step=1.0, value=val_km_atual, key=f"edit_km_{row['id']}")
                             
                             col_save, col_cancel = st.columns(2)
