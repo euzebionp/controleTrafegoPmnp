@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Viagens</h2>
+    <a href="{% url 'viagem_create' %}" class="btn btn-primary">Nova Viagem</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Hora Saída</th>
+                    <th>Motorista</th>
+                    <th>Veículo</th>
+                    <th>Origem</th>
+                    <th>Destino</th>
+                    <th>Distância</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for viagem in viagens %}
+                <tr>
+                    <td>{{ viagem.data }}</td>
+                    <td>{{ viagem.hora_saida }}</td>
+                    <td>{{ viagem.motorista }}</td>
+                    <td>{{ viagem.veiculo }}</td>
+                    <td>{{ viagem.origem }}</td>
+                    <td>{{ viagem.destino }}</td>
+                    <td>{{ viagem.distancia }}</td>
+                    <td>
+                        <a href="{% url 'viagem_update' viagem.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                        <a href="{% url 'viagem_delete' viagem.pk %}" class="btn btn-sm btn-danger">Excluir</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center">Nenhuma viagem cadastrada.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

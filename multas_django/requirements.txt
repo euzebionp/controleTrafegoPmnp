@@ -1,0 +1,8 @@
+Django>=4.2
+pillow
+reportlab
+geopy
+django-crispy-forms
+crispy-bootstrap5
+plotly
+pandas

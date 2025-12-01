@@ -15,13 +15,17 @@ def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
+        print(f"DEBUG: Login attempt for user: '{username}' with password: '{password}'")
+        
         user = authenticate(request, username=username, password=password)
+        print(f"DEBUG: Authenticate returned: {user}")
         
         if user is not None:
             login(request, user)
             messages.success(request, f'Bem-vindo, {user.username}!')
             return redirect('dashboard')
         else:
+            print("DEBUG: Authentication failed")
             messages.error(request, 'Usuário ou senha inválidos.')
     
     return render(request, 'logistics/login.html')
