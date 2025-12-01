@@ -107,9 +107,27 @@ def maintenance_page():
                 
                 st.markdown("---")
                 st.write("**Previsão do Próximo Serviço**")
+                
+                # Calculate next service km based on service type
+                if tipo_servico == "Troca de Óleo":
+                    default_next_km = km_realizado + 10000
+                    km_help = "Troca de óleo: automaticamente +10.000km"
+                elif tipo_servico == "Revisão Geral":
+                    default_next_km = km_realizado + 20000
+                    km_help = "Revisão geral: sugestão de +20.000km"
+                elif tipo_servico == "Troca de Pneus":
+                    default_next_km = km_realizado + 40000
+                    km_help = "Troca de pneus: sugestão de +40.000km"
+                elif tipo_servico == "Freios":
+                    default_next_km = km_realizado + 30000
+                    km_help = "Freios: sugestão de +30.000km"
+                else:
+                    default_next_km = km_realizado + 10000
+                    km_help = "Defina a quilometragem da próxima revisão"
+                
                 col3, col4 = st.columns(2)
                 with col3:
-                    proximo_km = st.number_input("Próxima Revisão (Km)", min_value=0.0, value=km_realizado + 10000, step=100.0, help="Geralmente +10.000km para troca de óleo")
+                    proximo_km = st.number_input("Próxima Revisão (Km)", min_value=0.0, value=float(default_next_km), step=100.0, help=km_help)
                 with col4:
                     proximo_data = st.date_input("Data Prevista", value=datetime.now() + timedelta(days=180), help="Estimativa de 6 meses")
                 
