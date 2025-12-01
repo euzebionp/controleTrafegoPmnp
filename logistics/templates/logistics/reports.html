@@ -1,0 +1,151 @@
+{% extends 'logistics/base.html' %}
+
+{% block title %}Relatórios - Sistema de Logística{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mb-4"><i class="bi bi-file-earmark-bar-graph"></i> Relatórios</h1>
+    
+    <div class="row">
+        <!-- Multas por Motorista -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="bi bi-person-badge"></i> Multas por Motorista</h5>
+                </div>
+                <div class="card-body">
+                    {% if multas_por_motorista %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Motorista</th>
+                                    <th>Total</th>
+                                    <th>Valor Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in multas_por_motorista %}
+                                <tr>
+                                    <td>{{ item.motorista__nome }}</td>
+                                    <td>{{ item.total }}</td>
+                                    <td>R$ {{ item.valor_total|floatformat:2 }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">Nenhum dado disponível.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Multas por Veículo -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="bi bi-car-front"></i> Multas por Veículo</h5>
+                </div>
+                <div class="card-body">
+                    {% if multas_por_veiculo %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Veículo</th>
+                                    <th>Total</th>
+                                    <th>Valor Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in multas_por_veiculo %}
+                                <tr>
+                                    <td>{{ item.veiculo__placa }}</td>
+                                    <td>{{ item.total }}</td>
+                                    <td>R$ {{ item.valor_total|floatformat:2 }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">Nenhum dado disponível.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Viagens por Motorista -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="bi bi-map"></i> Viagens por Motorista</h5>
+                </div>
+                <div class="card-body">
+                    {% if viagens_por_motorista %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Motorista</th>
+                                    <th>Total</th>
+                                    <th>Distância Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in viagens_por_motorista %}
+                                <tr>
+                                    <td>{{ item.motorista__nome }}</td>
+                                    <td>{{ item.total }}</td>
+                                    <td>{{ item.distancia_total|floatformat:0 }} km</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">Nenhum dado disponível.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Manutenções por Veículo -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="bi bi-tools"></i> Manutenções por Veículo</h5>
+                </div>
+                <div class="card-body">
+                    {% if manutencoes_por_veiculo %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Veículo</th>
+                                    <th>Total</th>
+                                    <th>Valor Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in manutencoes_por_veiculo %}
+                                <tr>
+                                    <td>{{ item.veiculo__placa }}</td>
+                                    <td>{{ item.total }}</td>
+                                    <td>R$ {{ item.valor_total|floatformat:2 }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">Nenhum dado disponível.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

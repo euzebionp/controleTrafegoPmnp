@@ -4,18 +4,21 @@ import os
 
 DB_NAME = "traffic_app.db"
 
+
 def get_connection():
     """Establishes a connection to the SQLite database."""
     conn = sqlite3.connect(DB_NAME)
     return conn
 
+
 def init_db():
     """Initializes the database with the required tables."""
     conn = get_connection()
     cursor = conn.cursor()
-    
+
     # Table: motoristas
-    cursor.execute('''
+    cursor.execute(
+        """
         CREATE TABLE IF NOT EXISTS motoristas (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT NOT NULL,
@@ -23,10 +26,12 @@ def init_db():
             cnh TEXT NOT NULL UNIQUE,
             validade_cnh TEXT NOT NULL
         )
-    ''')
-    
+    """
+    )
+
     # Table: veiculos
-    cursor.execute('''
+    cursor.execute(
+        """
         CREATE TABLE IF NOT EXISTS veiculos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             placa TEXT NOT NULL UNIQUE,
@@ -35,10 +40,12 @@ def init_db():
             renavam TEXT NOT NULL UNIQUE,
             km_atual REAL DEFAULT 0
         )
-    ''')
-    
+    """
+    )
+
     # Table: multas
-    cursor.execute('''
+    cursor.execute(
+        """
         CREATE TABLE IF NOT EXISTS multas (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             data TEXT NOT NULL,
@@ -54,10 +61,12 @@ def init_db():
             FOREIGN KEY (veiculo_id) REFERENCES veiculos (id),
             FOREIGN KEY (viagem_id) REFERENCES viagens (id)
         )
-    ''')
-    
+    """
+    )
+
     # Table: viagens
-    cursor.execute('''
+    cursor.execute(
+        """
         CREATE TABLE IF NOT EXISTS viagens (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             data TEXT NOT NULL,
@@ -70,10 +79,12 @@ def init_db():
             FOREIGN KEY (motorista_id) REFERENCES motoristas (id),
             FOREIGN KEY (veiculo_id) REFERENCES veiculos (id)
         )
-    ''')
-    
+    """
+    )
+
     # Table: manutencoes
-    cursor.execute('''
+    cursor.execute(
+        """
         CREATE TABLE IF NOT EXISTS manutencoes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             veiculo_id INTEGER NOT NULL,
@@ -86,51 +97,58 @@ def init_db():
             valor REAL NOT NULL,
             FOREIGN KEY (veiculo_id) REFERENCES veiculos (id)
         )
-    ''')
+    """
+    )
 
     # Check and add columns if they don't exist (Migration)
     try:
         cursor.execute("ALTER TABLE veiculos ADD COLUMN km_atual REAL DEFAULT 0")
     except sqlite3.OperationalError:
-        pass # Column already exists
-        
+        pass  # Column already exists
+
     try:
         cursor.execute("ALTER TABLE viagens ADD COLUMN distancia REAL DEFAULT 0")
     except sqlite3.OperationalError:
-        pass # Column already exists
+        pass  # Column already exists
 
     try:
         cursor.execute("ALTER TABLE multas ADD COLUMN hora_infracao TEXT")
     except sqlite3.OperationalError:
-        pass # Column already exists
+        pass  # Column already exists
 
     try:
-        cursor.execute("ALTER TABLE multas ADD COLUMN viagem_id INTEGER REFERENCES viagens(id)")
+        cursor.execute(
+            "ALTER TABLE multas ADD COLUMN viagem_id INTEGER REFERENCES viagens(id)"
+        )
     except sqlite3.OperationalError:
-        pass # Column already exists
+        pass  # Column already exists
 
     try:
         cursor.execute("ALTER TABLE viagens ADD COLUMN origem TEXT DEFAULT ''")
     except sqlite3.OperationalError:
-        pass # Column already exists
-        
+        pass  # Column already exists
+
     try:
         cursor.execute("ALTER TABLE viagens ADD COLUMN km_atual REAL")
     except sqlite3.OperationalError:
-        pass # Column already exists
-    
+        pass  # Column already exists
+
     conn.commit()
     conn.close()
+
 
 def add_driver(nome, cpf, cnh, validade_cnh):
     """Adds a new driver to the database."""
     conn = get_connection()
     cursor = conn.cursor()
     try:
-        cursor.execute('''
+        cursor.execute(
+            """
             INSERT INTO motoristas (nome, cpf, cnh, validade_cnh)
             VALUES (?, ?, ?, ?)
-        ''', (nome, cpf, cnh, validade_cnh))
+        """,
+            (nome, cpf, cnh, validade_cnh),
+        )
         conn.commit()
         return True, "Motorista cadastrado com sucesso!"
     except sqlite3.IntegrityError as e:
@@ -138,15 +156,19 @@ def add_driver(nome, cpf, cnh, validade_cnh):
     finally:
         conn.close()
 
+
 def add_vehicle(placa, modelo, ano, renavam, km_atual=0):
     """Adds a new vehicle to the database."""
     conn = get_connection()
     cursor = conn.cursor()
     try:
-        cursor.execute('''
+        cursor.execute(
+            """
             INSERT INTO veiculos (placa, modelo, ano, renavam, km_atual)
             VALUES (?, ?, ?, ?, ?)
-        ''', (placa, modelo, ano, renavam, km_atual))
+        """,
+            (placa, modelo, ano, renavam, km_atual),
+        )
         conn.commit()
         return True, "Veículo cadastrado com sucesso!"
     except sqlite3.IntegrityError as e:
@@ -154,21 +176,46 @@ def add_vehicle(placa, modelo, ano, renavam, km_atual=0):
     finally:
         conn.close()
 
-def add_fine(data, local, tipo_infracao, descricao, motorista_id, veiculo_id, valor, hora_infracao=None, viagem_id=None):
+
+def add_fine(
+    data,
+    local,
+    tipo_infracao,
+    descricao,
+    motorista_id,
+    veiculo_id,
+    valor,
+    hora_infracao=None,
+    viagem_id=None,
+):
     """Adds a new fine to the database."""
     conn = get_connection()
     cursor = conn.cursor()
     try:
-        cursor.execute('''
+        cursor.execute(
+            """
             INSERT INTO multas (data, hora_infracao, local, tipo_infracao, descricao, motorista_id, veiculo_id, valor, viagem_id)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (data, hora_infracao, local, tipo_infracao, descricao, motorista_id, veiculo_id, valor, viagem_id))
+        """,
+            (
+                data,
+                hora_infracao,
+                local,
+                tipo_infracao,
+                descricao,
+                motorista_id,
+                veiculo_id,
+                valor,
+                viagem_id,
+            ),
+        )
         conn.commit()
         return True, "Multa cadastrada com sucesso!"
     except Exception as e:
         return False, f"Erro ao cadastrar multa: {e}"
     finally:
         conn.close()
+
 
 def get_drivers():
     """Returns a DataFrame with all drivers."""
@@ -178,6 +225,7 @@ def get_drivers():
     conn.close()
     return df
 
+
 def get_vehicles():
     """Returns a DataFrame with all vehicles."""
     conn = get_connection()
@@ -186,10 +234,11 @@ def get_vehicles():
     conn.close()
     return df
 
+
 def get_fines_df():
     """Returns a DataFrame with details of all fines."""
     conn = get_connection()
-    query = '''
+    query = """
         SELECT 
             m.id, 
             m.data, 
@@ -203,23 +252,28 @@ def get_fines_df():
         FROM multas m
         JOIN motoristas mot ON m.motorista_id = mot.id
         JOIN veiculos v ON m.veiculo_id = v.id
-    '''
+    """
     df = pd.read_sql_query(query, conn)
     conn.close()
     return df
 
+
 # ============ UPDATE FUNCTIONS ============
+
 
 def update_driver(driver_id, nome, cpf, cnh, validade_cnh):
     """Updates an existing driver's information."""
     conn = get_connection()
     cursor = conn.cursor()
     try:
-        cursor.execute('''
+        cursor.execute(
+            """
             UPDATE motoristas 
             SET nome = ?, cpf = ?, cnh = ?, validade_cnh = ?
             WHERE id = ?
-        ''', (nome, cpf, cnh, validade_cnh, driver_id))
+        """,
+            (nome, cpf, cnh, validade_cnh, driver_id),
+        )
         conn.commit()
         return True, "Motorista atualizado com sucesso!"
     except sqlite3.IntegrityError as e:
@@ -227,16 +281,20 @@ def update_driver(driver_id, nome, cpf, cnh, validade_cnh):
     finally:
         conn.close()
 
+
 def update_vehicle(vehicle_id, placa, modelo, ano, renavam, km_atual):
     """Updates an existing vehicle's information."""
     conn = get_connection()
     cursor = conn.cursor()
     try:
-        cursor.execute('''
+        cursor.execute(
+            """
             UPDATE veiculos 
             SET placa = ?, modelo = ?, ano = ?, renavam = ?, km_atual = ?
             WHERE id = ?
-        ''', (placa, modelo, ano, renavam, km_atual, vehicle_id))
+        """,
+            (placa, modelo, ano, renavam, km_atual, vehicle_id),
+        )
         conn.commit()
         return True, "Veículo atualizado com sucesso!"
     except sqlite3.IntegrityError as e:
@@ -244,17 +302,32 @@ def update_vehicle(vehicle_id, placa, modelo, ano, renavam, km_atual):
     finally:
         conn.close()
 
-def update_fine(fine_id, data, local, tipo_infracao, descricao, motorista_id, veiculo_id, valor):
+
+def update_fine(
+    fine_id, data, local, tipo_infracao, descricao, motorista_id, veiculo_id, valor
+):
     """Updates an existing fine's information."""
     conn = get_connection()
     cursor = conn.cursor()
     try:
-        cursor.execute('''
+        cursor.execute(
+            """
             UPDATE multas 
             SET data = ?, local = ?, tipo_infracao = ?, descricao = ?, 
                 motorista_id = ?, veiculo_id = ?, valor = ?
             WHERE id = ?
-        ''', (data, local, tipo_infracao, descricao, motorista_id, veiculo_id, valor, fine_id))
+        """,
+            (
+                data,
+                local,
+                tipo_infracao,
+                descricao,
+                motorista_id,
+                veiculo_id,
+                valor,
+                fine_id,
+            ),
+        )
         conn.commit()
         return True, "Multa atualizada com sucesso!"
     except Exception as e:
@@ -262,7 +335,9 @@ def update_fine(fine_id, data, local, tipo_infracao, descricao, motorista_id, ve
     finally:
         conn.close()
 
+
 # ============ DELETE FUNCTIONS ============
+
 
 def delete_driver(driver_id):
     """Deletes a driver from the database."""
@@ -270,11 +345,16 @@ def delete_driver(driver_id):
     cursor = conn.cursor()
     try:
         # Check if driver has associated fines
-        cursor.execute("SELECT COUNT(*) FROM multas WHERE motorista_id = ?", (driver_id,))
+        cursor.execute(
+            "SELECT COUNT(*) FROM multas WHERE motorista_id = ?", (driver_id,)
+        )
         count = cursor.fetchone()[0]
         if count > 0:
-            return False, f"Não é possível excluir. Este motorista possui {count} multa(s) associada(s)."
-        
+            return (
+                False,
+                f"Não é possível excluir. Este motorista possui {count} multa(s) associada(s).",
+            )
+
         cursor.execute("DELETE FROM motoristas WHERE id = ?", (driver_id,))
         conn.commit()
         return True, "Motorista excluído com sucesso!"
@@ -283,29 +363,45 @@ def delete_driver(driver_id):
     finally:
         conn.close()
 
+
 def delete_vehicle(vehicle_id):
     """Deletes a vehicle from the database."""
     conn = get_connection()
     cursor = conn.cursor()
     try:
         # Check if vehicle has associated fines
-        cursor.execute("SELECT COUNT(*) FROM multas WHERE veiculo_id = ?", (vehicle_id,))
+        cursor.execute(
+            "SELECT COUNT(*) FROM multas WHERE veiculo_id = ?", (vehicle_id,)
+        )
         count_fines = cursor.fetchone()[0]
         if count_fines > 0:
-            return False, f"Não é possível excluir. Este veículo possui {count_fines} multa(s) associada(s)."
-        
+            return (
+                False,
+                f"Não é possível excluir. Este veículo possui {count_fines} multa(s) associada(s).",
+            )
+
         # Check if vehicle has associated travels
-        cursor.execute("SELECT COUNT(*) FROM viagens WHERE veiculo_id = ?", (vehicle_id,))
+        cursor.execute(
+            "SELECT COUNT(*) FROM viagens WHERE veiculo_id = ?", (vehicle_id,)
+        )
         count_travels = cursor.fetchone()[0]
         if count_travels > 0:
-            return False, f"Não é possível excluir. Este veículo possui {count_travels} viagem(ns) associada(s)."
+            return (
+                False,
+                f"Não é possível excluir. Este veículo possui {count_travels} viagem(ns) associada(s).",
+            )
 
         # Check if vehicle has associated maintenances
-        cursor.execute("SELECT COUNT(*) FROM manutencoes WHERE veiculo_id = ?", (vehicle_id,))
+        cursor.execute(
+            "SELECT COUNT(*) FROM manutencoes WHERE veiculo_id = ?", (vehicle_id,)
+        )
         count_maintenances = cursor.fetchone()[0]
         if count_maintenances > 0:
-            return False, f"Não é possível excluir. Este veículo possui {count_maintenances} manutenção(ões) associada(s)."
-        
+            return (
+                False,
+                f"Não é possível excluir. Este veículo possui {count_maintenances} manutenção(ões) associada(s).",
+            )
+
         cursor.execute("DELETE FROM veiculos WHERE id = ?", (vehicle_id,))
         conn.commit()
         return True, "Veículo excluído com sucesso!"
@@ -313,6 +409,7 @@ def delete_vehicle(vehicle_id):
         return False, f"Erro ao excluir veículo: {e}"
     finally:
         conn.close()
+
 
 def delete_fine(fine_id):
     """Deletes a fine from the database."""
@@ -327,7 +424,9 @@ def delete_fine(fine_id):
     finally:
         conn.close()
 
+
 # ============ GETTER FUNCTIONS FOR SINGLE RECORDS ============
+
 
 def get_driver_by_id(driver_id):
     """Returns a single driver by ID."""
@@ -338,13 +437,14 @@ def get_driver_by_id(driver_id):
     conn.close()
     if result:
         return {
-            'id': result[0],
-            'nome': result[1],
-            'cpf': result[2],
-            'cnh': result[3],
-            'validade_cnh': result[4]
+            "id": result[0],
+            "nome": result[1],
+            "cpf": result[2],
+            "cnh": result[3],
+            "validade_cnh": result[4],
         }
     return None
+
 
 def get_vehicle_by_id(vehicle_id):
     """Returns a single vehicle by ID."""
@@ -354,18 +454,19 @@ def get_vehicle_by_id(vehicle_id):
     result = cursor.fetchone()
     conn.close()
     if result:
-        # Handle cases where km_atual might not exist in old records if not migrated properly, 
+        # Handle cases where km_atual might not exist in old records if not migrated properly,
         # but init_db handles migration.
         # Structure: id, placa, modelo, ano, renavam, km_atual
         return {
-            'id': result[0],
-            'placa': result[1],
-            'modelo': result[2],
-            'ano': result[3],
-            'renavam': result[4],
-            'km_atual': result[5] if len(result) > 5 else 0
+            "id": result[0],
+            "placa": result[1],
+            "modelo": result[2],
+            "ano": result[3],
+            "renavam": result[4],
+            "km_atual": result[5] if len(result) > 5 else 0,
         }
     return None
+
 
 def get_fine_by_id(fine_id):
     """Returns a single fine by ID."""
@@ -376,75 +477,105 @@ def get_fine_by_id(fine_id):
     conn.close()
     if result:
         return {
-            'id': result[0],
-            'data': result[1],
-            'local': result[2],
-            'tipo_infracao': result[3],
-            'descricao': result[4],
-            'motorista_id': result[5],
-            'veiculo_id': result[6],
-            'valor': result[7]
+            "id": result[0],
+            "data": result[1],
+            "local": result[2],
+            "tipo_infracao": result[3],
+            "descricao": result[4],
+            "motorista_id": result[5],
+            "veiculo_id": result[6],
+            "valor": result[7],
         }
     return None
 
+
 # ============ TRAVEL FUNCTIONS ============
 
-def add_travel(data, motorista_id, veiculo_id, origem, destino, hora_saida, distancia=0, km_atual=None):
+
+def add_travel(
+    data,
+    motorista_id,
+    veiculo_id,
+    origem,
+    destino,
+    hora_saida,
+    distancia=0,
+    km_atual=None,
+):
     """Adds a new travel to the database and updates vehicle mileage."""
     conn = get_connection()
     cursor = conn.cursor()
     alert_message = None
-    
+
     try:
-        cursor.execute('''
+        cursor.execute(
+            """
             INSERT INTO viagens (data, motorista_id, veiculo_id, origem, destino, hora_saida, distancia, km_atual)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (data, motorista_id, veiculo_id, origem, destino, hora_saida, distancia, km_atual))
-        
+        """,
+            (
+                data,
+                motorista_id,
+                veiculo_id,
+                origem,
+                destino,
+                hora_saida,
+                distancia,
+                km_atual,
+            ),
+        )
+
         # Update vehicle mileage
         final_km = 0
         if km_atual:
             final_km = km_atual
-            cursor.execute('''
+            cursor.execute(
+                """
                 UPDATE veiculos 
                 SET km_atual = ?
                 WHERE id = ?
-            ''', (km_atual, veiculo_id))
+            """,
+                (km_atual, veiculo_id),
+            )
         elif distancia > 0:
             # Get current km to calculate final
             cursor.execute("SELECT km_atual FROM veiculos WHERE id = ?", (veiculo_id,))
             curr = cursor.fetchone()
             current_val = curr[0] if curr and curr[0] else 0
             final_km = current_val + distancia
-            
-            cursor.execute('''
+
+            cursor.execute(
+                """
                 UPDATE veiculos 
                 SET km_atual = km_atual + ?
                 WHERE id = ?
-            ''', (distancia, veiculo_id))
-            
+            """,
+                (distancia, veiculo_id),
+            )
+
         conn.commit()
-        
+
         # Check for maintenance
         if final_km > 0:
             is_due, msg = check_maintenance_due(veiculo_id, final_km)
             if is_due:
                 alert_message = msg
-                
+
         success_msg = "Viagem cadastrada com sucesso!"
         if alert_message:
             success_msg += f" {alert_message}"
-            
+
         return True, success_msg
     except Exception as e:
         return False, f"Erro ao cadastrar viagem: {e}"
     finally:
         conn.close()
 
+
 def get_travels():
     """Returns a DataFrame with all travels."""
     conn = get_connection()
-    query = '''
+    query = """
         SELECT 
             v.id,
             v.data,
@@ -460,10 +591,11 @@ def get_travels():
         JOIN motoristas m ON v.motorista_id = m.id
         JOIN veiculos ve ON v.veiculo_id = ve.id
         ORDER BY v.data DESC, v.hora_saida DESC
-    '''
+    """
     df = pd.read_sql_query(query, conn)
     conn.close()
     return df
+
 
 def get_travel_by_id(travel_id):
     """Returns a single travel by ID."""
@@ -474,44 +606,76 @@ def get_travel_by_id(travel_id):
     conn.close()
     if result:
         return {
-            'id': result[0],
-            'data': result[1],
-            'motorista_id': result[2],
-            'veiculo_id': result[3],
-            'origem': result[4] if len(result) > 7 else '', # Handle migration
-            'destino': result[5] if len(result) > 7 else result[4], # Shift if old schema
-            'hora_saida': result[6] if len(result) > 7 else result[5],
-            'distancia': result[7] if len(result) > 7 else (result[6] if len(result) > 6 else 0),
-            'km_atual': result[8] if len(result) > 8 else 0
+            "id": result[0],
+            "data": result[1],
+            "motorista_id": result[2],
+            "veiculo_id": result[3],
+            "origem": result[4] if len(result) > 7 else "",  # Handle migration
+            "destino": (
+                result[5] if len(result) > 7 else result[4]
+            ),  # Shift if old schema
+            "hora_saida": result[6] if len(result) > 7 else result[5],
+            "distancia": (
+                result[7] if len(result) > 7 else (result[6] if len(result) > 6 else 0)
+            ),
+            "km_atual": result[8] if len(result) > 8 else 0,
         }
     return None
 
-def update_travel(travel_id, data, motorista_id, veiculo_id, origem, destino, hora_saida, distancia, km_atual=None):
+
+def update_travel(
+    travel_id,
+    data,
+    motorista_id,
+    veiculo_id,
+    origem,
+    destino,
+    hora_saida,
+    distancia,
+    km_atual=None,
+):
     """Updates an existing travel's information and adjusts vehicle mileage."""
     conn = get_connection()
     cursor = conn.cursor()
     try:
         # Update the travel record
-        cursor.execute('''
+        cursor.execute(
+            """
             UPDATE viagens 
             SET data = ?, motorista_id = ?, veiculo_id = ?, origem = ?, destino = ?, hora_saida = ?, distancia = ?, km_atual = ?
             WHERE id = ?
-        ''', (data, motorista_id, veiculo_id, origem, destino, hora_saida, distancia, km_atual, travel_id))
-        
+        """,
+            (
+                data,
+                motorista_id,
+                veiculo_id,
+                origem,
+                destino,
+                hora_saida,
+                distancia,
+                km_atual,
+                travel_id,
+            ),
+        )
+
         # Update vehicle mileage if km_atual is provided
         if km_atual and km_atual > 0:
-            cursor.execute('''
+            cursor.execute(
+                """
                 UPDATE veiculos 
                 SET km_atual = ?
                 WHERE id = ?
-            ''', (km_atual, veiculo_id))
-        
+            """,
+                (km_atual, veiculo_id),
+            )
+
         conn.commit()
         return True, "Viagem atualizada com sucesso!"
     except Exception as e:
         return False, f"Erro ao atualizar viagem: {e}"
     finally:
         conn.close()
+
 
 def delete_travel(travel_id):
     """Deletes a travel from the database and reverts mileage."""
@@ -522,23 +686,31 @@ def delete_travel(travel_id):
         cursor.execute("SELECT COUNT(*) FROM multas WHERE viagem_id = ?", (travel_id,))
         count = cursor.fetchone()[0]
         if count > 0:
-            return False, f"Não é possível excluir. Esta viagem possui {count} multa(s) associada(s)."
-        
+            return (
+                False,
+                f"Não é possível excluir. Esta viagem possui {count} multa(s) associada(s).",
+            )
+
         # Get distance to revert mileage
-        cursor.execute("SELECT veiculo_id, distancia FROM viagens WHERE id = ?", (travel_id,))
+        cursor.execute(
+            "SELECT veiculo_id, distancia FROM viagens WHERE id = ?", (travel_id,)
+        )
         travel = cursor.fetchone()
-        
+
         if travel:
             veiculo_id = travel[0]
             distancia = travel[1] if travel[1] else 0
-            
+
             # Revert mileage
-            cursor.execute('''
+            cursor.execute(
+                """
                 UPDATE veiculos 
                 SET km_atual = km_atual - ?
                 WHERE id = ?
-            ''', (distancia, veiculo_id))
-        
+            """,
+                (distancia, veiculo_id),
+            )
+
         cursor.execute("DELETE FROM viagens WHERE id = ?", (travel_id,))
         conn.commit()
         return True, "Viagem excluída com sucesso!"
@@ -547,40 +719,73 @@ def delete_travel(travel_id):
     finally:
         conn.close()
 
+
 # ============ MAINTENANCE FUNCTIONS ============
+
 
 def check_maintenance_due(vehicle_id, current_km):
     """Checks if maintenance is due for the vehicle."""
     conn = get_connection()
     cursor = conn.cursor()
-    
+
     # Get max next service km
-    cursor.execute('''
+    cursor.execute(
+        """
         SELECT MAX(proximo_servico_km) 
         FROM manutencoes 
         WHERE veiculo_id = ?
-    ''', (vehicle_id,))
+    """,
+        (vehicle_id,),
+    )
     result = cursor.fetchone()
     conn.close()
-    
+
     if result and result[0]:
         next_service = result[0]
         if current_km >= next_service:
-            return True, f"⚠️ MANUTENÇÃO VENCIDA! O veículo atingiu {current_km} km. Próxima revisão era aos {next_service} km."
+            return (
+                True,
+                f"⚠️ MANUTENÇÃO VENCIDA! O veículo atingiu {current_km} km. Próxima revisão era aos {next_service} km.",
+            )
         elif (next_service - current_km) <= 1000:
-            return True, f"⚠️ Manutenção Próxima! Faltam {next_service - current_km:.0f} km para a revisão."
-            
+            return (
+                True,
+                f"⚠️ Manutenção Próxima! Faltam {next_service - current_km:.0f} km para a revisão.",
+            )
+
     return False, None
 
-def add_maintenance(veiculo_id, data, tipo_servico, descricao, km_realizado, proximo_servico_km, proximo_servico_data, valor):
+
+def add_maintenance(
+    veiculo_id,
+    data,
+    tipo_servico,
+    descricao,
+    km_realizado,
+    proximo_servico_km,
+    proximo_servico_data,
+    valor,
+):
     """Adds a new maintenance record."""
     conn = get_connection()
     cursor = conn.cursor()
     try:
-        cursor.execute('''
+        cursor.execute(
+            """
             INSERT INTO manutencoes (veiculo_id, data, tipo_servico, descricao, km_realizado, proximo_servico_km, proximo_servico_data, valor)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (veiculo_id, data, tipo_servico, descricao, km_realizado, proximo_servico_km, proximo_servico_data, valor))
+        """,
+            (
+                veiculo_id,
+                data,
+                tipo_servico,
+                descricao,
+                km_realizado,
+                proximo_servico_km,
+                proximo_servico_data,
+                valor,
+            ),
+        )
         conn.commit()
         return True, "Manutenção registrada com sucesso!"
     except Exception as e:
@@ -588,10 +793,11 @@ def add_maintenance(veiculo_id, data, tipo_servico, descricao, km_realizado, pro
     finally:
         conn.close()
 
+
 def get_maintenances():
     """Returns a DataFrame with all maintenance records."""
     conn = get_connection()
-    query = '''
+    query = """
         SELECT 
             m.id,
             m.data,
@@ -606,10 +812,11 @@ def get_maintenances():
         FROM manutencoes m
         JOIN veiculos v ON m.veiculo_id = v.id
         ORDER BY m.data DESC
-    '''
+    """
     df = pd.read_sql_query(query, conn)
     conn.close()
     return df
+
 
 def delete_maintenance(maintenance_id):
     """Deletes a maintenance record."""
@@ -624,6 +831,7 @@ def delete_maintenance(maintenance_id):
     finally:
         conn.close()
 
+
 def get_maintenance_alerts():
     """Returns a DataFrame of vehicles approaching maintenance."""
     conn = get_connection()
@@ -631,8 +839,8 @@ def get_maintenance_alerts():
     # or next service date is close/passed.
     # For simplicity, let's fetch all vehicles with their latest maintenance info and filter in Python or complex SQL.
     # Here we'll do a query to get vehicles and their max next_service_km.
-    
-    query = '''
+
+    query = """
         SELECT 
             v.id,
             v.placa,
@@ -643,18 +851,18 @@ def get_maintenance_alerts():
         FROM veiculos v
         LEFT JOIN manutencoes m ON v.id = m.veiculo_id
         GROUP BY v.id
-    '''
+    """
     df = pd.read_sql_query(query, conn)
     conn.close()
-    
+
     # Filter for alerts (e.g., within 1000km or date passed)
     alerts = []
     for index, row in df.iterrows():
-        if pd.notna(row['proximo_servico_km']):
-            km_diff = row['proximo_servico_km'] - row['km_atual']
-            if km_diff <= 1000: # Alert if within 1000km or overdue
+        if pd.notna(row["proximo_servico_km"]):
+            km_diff = row["proximo_servico_km"] - row["km_atual"]
+            if km_diff <= 1000:  # Alert if within 1000km or overdue
                 alerts.append(row)
-    
+
     if alerts:
         return pd.DataFrame(alerts)
     return pd.DataFrame()

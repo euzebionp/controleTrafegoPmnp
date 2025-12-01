@@ -1,0 +1,33 @@
+{% extends 'logistics/base.html' %}
+
+{% block title %}Excluir Viagem - Sistema de Logística{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4><i class="bi bi-exclamation-triangle"></i> Confirmar Exclusão</h4>
+                </div>
+                <div class="card-body">
+                    <p>Tem certeza que deseja excluir a viagem de <strong>{{ viagem.origem }}</strong> para <strong>{{ viagem.destino }}</strong>?</p>
+                    <p class="text-muted">Esta ação não pode ser desfeita.</p>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'viagem_list' %}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash"></i> Excluir
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

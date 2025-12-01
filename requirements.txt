@@ -1,5 +1,7 @@
-streamlit
+Django>=4.2,<5.0
 pandas
-plotly
 reportlab
 geopy
+django-crispy-forms
+crispy-bootstrap4
+pillow

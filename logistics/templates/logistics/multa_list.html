@@ -1,0 +1,60 @@
+{% extends 'logistics/base.html' %}
+
+{% block title %}Multas - Sistema de Logística{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="bi bi-exclamation-triangle"></i> Multas</h1>
+        <a href="{% url 'multa_create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Nova Multa
+        </a>
+    </div>
+    
+    {% if multas %}
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Motorista</th>
+                            <th>Veículo</th>
+                            <th>Tipo de Infração</th>
+                            <th>Local</th>
+                            <th>Valor</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for multa in multas %}
+                        <tr>
+                            <td>{{ multa.data|date:"d/m/Y" }}</td>
+                            <td>{{ multa.motorista.nome }}</td>
+                            <td>{{ multa.veiculo.placa }}</td>
+                            <td>{{ multa.tipo_infracao }}</td>
+                            <td>{{ multa.local }}</td>
+                            <td>R$ {{ multa.valor|floatformat:2 }}</td>
+                            <td>
+                                <a href="{% url 'multa_update' multa.pk %}" class="btn btn-sm btn-warning">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="{% url 'multa_delete' multa.pk %}" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle"></i> Nenhuma multa cadastrada.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

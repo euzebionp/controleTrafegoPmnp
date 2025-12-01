@@ -1,0 +1,142 @@
+{% extends 'logistics/base.html' %}
+
+{% block title %}Dashboard - Sistema de Logística{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mb-4"><i class="bi bi-speedometer2"></i> Dashboard</h1>
+    
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-person-badge"></i> Motoristas</h5>
+                    <h2>{{ total_motoristas }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-car-front"></i> Veículos</h5>
+                    <h2>{{ total_veiculos }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-map"></i> Viagens</h5>
+                    <h2>{{ total_viagens }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-exclamation-triangle"></i> Multas</h5>
+                    <h2>{{ total_multas }}</h2>
+                    <p class="mb-0">Total: R$ {{ total_multas_valor|floatformat:2 }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Maintenance Alerts -->
+    {% if manutencoes_pendentes %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="bi bi-exclamation-triangle-fill"></i> Alertas de Manutenção</h5>
+                </div>
+                <div class="card-body">
+                    {% for item in manutencoes_pendentes %}
+                    <div class="alert alert-warning mb-2">
+                        <strong>{{ item.veiculo.placa }} - {{ item.veiculo.modelo }}</strong><br>
+                        {{ item.message }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Recent Data -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-map"></i> Viagens Recentes</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_viagens %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Motorista</th>
+                                    <th>Veículo</th>
+                                    <th>Destino</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for viagem in recent_viagens %}
+                                <tr>
+                                    <td>{{ viagem.data|date:"d/m/Y" }}</td>
+                                    <td>{{ viagem.motorista.nome }}</td>
+                                    <td>{{ viagem.veiculo.placa }}</td>
+                                    <td>{{ viagem.destino }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">Nenhuma viagem registrada.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-exclamation-triangle"></i> Multas Recentes</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_multas %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Motorista</th>
+                                    <th>Tipo</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for multa in recent_multas %}
+                                <tr>
+                                    <td>{{ multa.data|date:"d/m/Y" }}</td>
+                                    <td>{{ multa.motorista.nome }}</td>
+                                    <td>{{ multa.tipo_infracao }}</td>
+                                    <td>R$ {{ multa.valor|floatformat:2 }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">Nenhuma multa registrada.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

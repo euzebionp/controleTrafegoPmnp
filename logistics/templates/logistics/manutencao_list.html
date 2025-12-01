@@ -1,0 +1,68 @@
+{% extends 'logistics/base.html' %}
+
+{% block title %}Manutenções - Sistema de Logística{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="bi bi-tools"></i> Manutenções</h1>
+        <a href="{% url 'manutencao_create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Nova Manutenção
+        </a>
+    </div>
+    
+    {% if manutencoes %}
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Veículo</th>
+                            <th>Tipo de Serviço</th>
+                            <th>KM Realizado</th>
+                            <th>Próximo Serviço</th>
+                            <th>Valor</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for manutencao in manutencoes %}
+                        <tr>
+                            <td>{{ manutencao.data|date:"d/m/Y" }}</td>
+                            <td>{{ manutencao.veiculo.placa }}</td>
+                            <td>{{ manutencao.tipo_servico }}</td>
+                            <td>{{ manutencao.km_realizado|floatformat:0 }} km</td>
+                            <td>
+                                {% if manutencao.proximo_servico_km %}
+                                    {{ manutencao.proximo_servico_km|floatformat:0 }} km
+                                {% elif manutencao.proximo_servico_data %}
+                                    {{ manutencao.proximo_servico_data|date:"d/m/Y" }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>R$ {{ manutencao.valor|floatformat:2 }}</td>
+                            <td>
+                                <a href="{% url 'manutencao_update' manutencao.pk %}" class="btn btn-sm btn-warning">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="{% url 'manutencao_delete' manutencao.pk %}" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle"></i> Nenhuma manutenção cadastrada.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

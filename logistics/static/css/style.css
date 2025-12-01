@@ -1,0 +1,101 @@
+/* Custom Styles for Sistema de Logística */
+
+:root {
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --success-color: #198754;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --info-color: #0dcaf0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+
+.card {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.card-header {
+    font-weight: 600;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.125);
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.btn {
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+}
+
+.footer {
+    margin-top: auto;
+    border-top: 1px solid #dee2e6;
+}
+
+/* Dashboard Cards */
+.card.bg-primary,
+.card.bg-success,
+.card.bg-info,
+.card.bg-warning {
+    border: none;
+}
+
+.card.bg-primary h2,
+.card.bg-success h2,
+.card.bg-info h2,
+.card.bg-warning h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Alert Styling */
+.alert {
+    border-radius: 6px;
+}
+
+/* Form Styling */
+.form-control,
+.form-select {
+    border-radius: 6px;
+}
+
+/* Table Actions */
+.table td {
+    vertical-align: middle;
+}
+
+/* Login Page */
+.card.shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1rem;
+    }
+    
+    .card.bg-primary h2,
+    .card.bg-success h2,
+    .card.bg-info h2,
+    .card.bg-warning h2 {
+        font-size: 2rem;
+    }
+}
