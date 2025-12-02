@@ -38,13 +38,6 @@ class Viagem(models.Model):
     def __str__(self):
         return f"{self.data} - {self.origem} -> {self.destino}"
 
-    def save(self, *args, **kwargs):
-        # Update vehicle km on save if it's a new instance or distance changed
-        # This is a simplified approach; robust logic might be needed for updates
-        if not self.pk:
-            self.veiculo.km_atual += self.distancia
-            self.veiculo.save()
-        super().save(*args, **kwargs)
 
 class Multa(models.Model):
     data = models.DateField()

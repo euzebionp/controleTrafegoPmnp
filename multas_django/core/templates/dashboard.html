@@ -3,10 +3,62 @@
 {% block title %}Dashboard - Gestão Logística{% endblock %}
 
 {% block content %}
+<h2>Dashboard</h2>
+
+{% if alerts %}
+<div class="mb-4">
+    {% for alert in alerts %}
+    <div class="alert alert-{{ alert.type }} alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle"></i> {{ alert.message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 <div class="row">
-    <div class="col-12">
-        <h1 class="mb-4">Dashboard</h1>
-        <p>Bem-vindo ao novo sistema de Gestão Logística em Django!</p>
+    <div class="col-md-4 mb-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-users"></i> Motoristas</h5>
+                <p class="card-text display-4">{{ total_motoristas }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-car"></i> Veículos</h5>
+                <p class="card-text display-4">{{ total_veiculos }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-route"></i> Viagens</h5>
+                <p class="card-text display-4">{{ total_viagens }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-exclamation-circle"></i> Multas</h5>
+                <p class="card-text display-4">{{ total_multas }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <div class="card text-white bg-secondary">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-wrench"></i> Manutenções</h5>
+                <p class="card-text display-4">{{ total_manutencoes }}</p>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

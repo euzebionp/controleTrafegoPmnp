@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Manutenções</h2>
+    <a href="{% url 'manutencao_create' %}" class="btn btn-primary">Nova Manutenção</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Veículo</th>
+                    <th>Tipo de Serviço</th>
+                    <th>KM Realizado</th>
+                    <th>Próximo Serviço (KM)</th>
+                    <th>Próximo Serviço (Data)</th>
+                    <th>Valor</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for manutencao in manutencoes %}
+                <tr>
+                    <td>{{ manutencao.data|date:"d/m/Y" }}</td>
+                    <td>{{ manutencao.veiculo.placa }} - {{ manutencao.veiculo.modelo }}</td>
+                    <td>{{ manutencao.tipo_servico }}</td>
+                    <td>{{ manutencao.km_realizado }}</td>
+                    <td>{{ manutencao.proximo_servico_km|default:"-" }}</td>
+                    <td>{{ manutencao.proximo_servico_data|date:"d/m/Y"|default:"-" }}</td>
+                    <td>R$ {{ manutencao.valor }}</td>
+                    <td>
+                        <a href="{% url 'manutencao_update' manutencao.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                        <a href="{% url 'manutencao_delete' manutencao.pk %}" class="btn btn-sm btn-danger">Excluir</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center">Nenhuma manutenção cadastrada.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

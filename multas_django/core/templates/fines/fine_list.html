@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Multas</h2>
+    <a href="{% url 'multa_create' %}" class="btn btn-primary">Nova Multa</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Hora</th>
+                    <th>Local</th>
+                    <th>Tipo de Infração</th>
+                    <th>Motorista</th>
+                    <th>Veículo</th>
+                    <th>Valor</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for multa in multas %}
+                <tr>
+                    <td>{{ multa.data|date:"d/m/Y" }}</td>
+                    <td>{{ multa.hora_infracao|default:"-" }}</td>
+                    <td>{{ multa.local }}</td>
+                    <td>{{ multa.tipo_infracao }}</td>
+                    <td>{{ multa.motorista.nome }}</td>
+                    <td>{{ multa.veiculo.placa }} - {{ multa.veiculo.modelo }}</td>
+                    <td>R$ {{ multa.valor }}</td>
+                    <td>
+                        <a href="{% url 'multa_update' multa.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                        <a href="{% url 'multa_delete' multa.pk %}" class="btn btn-sm btn-danger">Excluir</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center">Nenhuma multa cadastrada.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
