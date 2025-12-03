@@ -9,8 +9,7 @@ from datetime import timedelta
 from django.http import HttpResponse
 from .models import Motorista, Veiculo, Viagem, Multa, Manutencao
 from .forms import ViagemForm
-from .reports import (gerar_relatorio_viagens_pdf, gerar_relatorio_multas_pdf,
-                      gerar_relatorio_viagens_excel, gerar_relatorio_multas_excel)
+from .reports import generate_pdf_report
     context_object_name = 'motoristas'
 
 class MotoristaCreateView(LoginRequiredMixin, CreateView):
@@ -149,30 +148,84 @@ class ManutencaoDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('manutencao_list')
 
 # Report Export Views
-def relatorio_viagens_pdf(request):
-    """Exporta relatório de viagens em PDF"""
-    viagens = Viagem.objects.select_related('motorista', 'veiculo').order_by('-data')
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="relatorio_viagens.pdf"'
-    return gerar_relatorio_viagens_pdf(viagens, response)
+# Report Export Views
+def relatorio_motoristas_pdf(request):
+    """Exporta relatório de motoristas em PDF"""
+    motoristas = Motorista.objects.all().order_by('nome')
+    headers = ['Nome', 'CPF', 'CNH', 'Validade CNH']
+    data = []
+    for m in motoristas:
+        data.append([
+            m.nome,
+            m.cpf,
+            m.cnh,
+            m.validade_cnh.strftime('%d/%m/%Y') if m.validade_cnh else '-'
+        ])
+    
+    return generate_pdf_report("Relatório de Motoristas", data, headers, "relatorio_motoristas.pdf")
 
-def relatorio_viagens_excel(request):
-    """Exporta relatório de viagens em Excel"""
-    viagens = Viagem.objects.select_related('motorista', 'veiculo').order_by('-data')
-    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename="relatorio_viagens.xlsx"'
-    return gerar_relatorio_viagens_excel(viagens, response)
+def relatorio_veiculos_pdf(request):
+    """Exporta relatório de veículos em PDF"""
+    veiculos = Veiculo.objects.all().order_by('placa')
+    headers = ['Placa', 'Modelo', 'Ano', 'Renavam', 'KM Atual']
+    data = []
+    for v in veiculos:
+        data.append([
+            v.placa,
+            v.modelo,
+            str(v.ano),
+            v.renavam,
+            str(v.km_atual)
+        ])
+    
+    return generate_pdf_report("Relatório de Veículos", data, headers, "relatorio_veiculos.pdf")
 
 def relatorio_multas_pdf(request):
     """Exporta relatório de multas em PDF"""
     multas = Multa.objects.select_related('motorista', 'veiculo').order_by('-data')
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="relatorio_multas.pdf"'
-    return gerar_relatorio_multas_pdf(multas, response)
+    headers = ['Data', 'Hora', 'Local', 'Motorista', 'Veículo', 'Valor']
+    data = []
+    for m in multas:
+        data.append([
+            m.data.strftime('%d/%m/%Y'),
+            m.hora_infracao.strftime('%H:%M') if m.hora_infracao else '-',
+            m.local,
+            m.motorista.nome if m.motorista else '-',
+            m.veiculo.placa if m.veiculo else '-',
+            f"R$ {m.valor:.2f}"
+        ])
+    
+    return generate_pdf_report("Relatório de Multas", data, headers, "relatorio_multas.pdf")
 
-def relatorio_multas_excel(request):
-    """Exporta relatório de multas em Excel"""
-    multas = Multa.objects.select_related('motorista', 'veiculo').order_by('-data')
-    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename="relatorio_multas.xlsx"'
-    return gerar_relatorio_multas_excel(multas, response)
+def relatorio_manutencoes_pdf(request):
+    """Exporta relatório de manutenções em PDF"""
+    manutencoes = Manutencao.objects.select_related('veiculo').order_by('-data')
+    headers = ['Veículo', 'Data', 'Tipo', 'Descrição', 'Valor']
+    data = []
+    for m in manutencoes:
+        data.append([
+            m.veiculo.placa if m.veiculo else '-',
+            m.data.strftime('%d/%m/%Y'),
+            m.tipo_servico,
+            m.descricao,
+            f"R$ {m.valor:.2f}"
+        ])
+    
+    return generate_pdf_report("Relatório de Manutenções", data, headers, "relatorio_manutencoes.pdf")
+
+# def relatorio_viagens_pdf(request):
+#     """Exporta relatório de viagens em PDF"""
+#     viagens = Viagem.objects.select_related('motorista', 'veiculo').order_by('-data')
+#     headers = ['Data', 'Saída', 'Chegada', 'Motorista', 'Veículo', 'Destino']
+#     data = []
+#     for v in viagens:
+#         data.append([
+#             v.data.strftime('%d/%m/%Y'),
+#             v.hora_saida.strftime('%H:%M') if v.hora_saida else '-',
+#             v.hora_chegada.strftime('%H:%M') if v.hora_chegada else '-',
+#             v.motorista.nome if v.motorista else '-',
+#             v.veiculo.placa if v.veiculo else '-',
+#             v.destino
+#         ])
+#     return generate_pdf_report("Relatório de Viagens", data, headers, "relatorio_viagens.pdf")
+

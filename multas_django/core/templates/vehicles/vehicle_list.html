@@ -3,7 +3,10 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Veículos</h2>
-    <a href="{% url 'veiculo_create' %}" class="btn btn-primary">Novo Veículo</a>
+    <div>
+        <a href="{% url 'relatorio_veiculos_pdf' %}" class="btn btn-secondary" target="_blank">Imprimir Relatório</a>
+        <a href="{% url 'veiculo_create' %}" class="btn btn-primary">Novo Veículo</a>
+    </div>
 </div>
 
 <div class="card">
