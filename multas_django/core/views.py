@@ -2,51 +2,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.db.models import F
+from django.db.models import F, Count, Sum
+from django.db.models.functions import TruncMonth
+from django.utils import timezone
+from datetime import timedelta
+from django.http import HttpResponse
 from .models import Motorista, Veiculo, Viagem, Multa, Manutencao
 from .forms import ViagemForm
-
-class DashboardView(LoginRequiredMixin, TemplateView):
-    template_name = 'dashboard.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['total_motoristas'] = Motorista.objects.count()
-        context['total_veiculos'] = Veiculo.objects.count()
-        context['total_viagens'] = Viagem.objects.count()
-        context['total_multas'] = Multa.objects.count()
-        context['total_manutencoes'] = Manutencao.objects.count()
-
-        # Maintenance Alerts
-        alerts = []
-        # Check for vehicles with maintenance due by KM
-        # We need to find the last maintenance for each vehicle to know the next service km
-        # For simplicity, we can query vehicles and their maintenances. 
-        # A more optimized way would be to have 'proximo_servico_km' on the Vehicle model or a separate status table.
-        # Here we will iterate over vehicles for the migration scope.
-        veiculos = Veiculo.objects.all()
-        for veiculo in veiculos:
-            last_maintenance = Manutencao.objects.filter(veiculo=veiculo).order_by('-data').first()
-            if last_maintenance and last_maintenance.proximo_servico_km:
-                if veiculo.km_atual >= last_maintenance.proximo_servico_km:
-                    alerts.append({
-                        'type': 'danger',
-                        'message': f"MANUTENÇÃO VENCIDA! {veiculo} atingiu {veiculo.km_atual} km. Revisão era aos {last_maintenance.proximo_servico_km} km."
-                    })
-                elif (last_maintenance.proximo_servico_km - veiculo.km_atual) <= 1000:
-                    remaining = last_maintenance.proximo_servico_km - veiculo.km_atual
-                    alerts.append({
-                        'type': 'warning',
-                        'message': f"Manutenção Próxima! {veiculo} - Faltam {remaining:.0f} km."
-                    })
-        
-        context['alerts'] = alerts
-        return context
-
-# Motorista Views
-class MotoristaListView(LoginRequiredMixin, ListView):
-    model = Motorista
-    template_name = 'drivers/driver_list.html'
+from .reports import (gerar_relatorio_viagens_pdf, gerar_relatorio_multas_pdf,
+                      gerar_relatorio_viagens_excel, gerar_relatorio_multas_excel)
     context_object_name = 'motoristas'
 
 class MotoristaCreateView(LoginRequiredMixin, CreateView):
@@ -94,6 +58,12 @@ class ViagemListView(LoginRequiredMixin, ListView):
     model = Viagem
     template_name = 'travels/travel_list.html'
     context_object_name = 'viagens'
+    paginate_by = 50
+    
+    def get_queryset(self):
+        return Viagem.objects.select_related(
+            'motorista', 'veiculo'
+        ).order_by('-data', '-hora_saida')
 
 class ViagemCreateView(LoginRequiredMixin, CreateView):
     model = Viagem
@@ -125,6 +95,12 @@ class MultaListView(LoginRequiredMixin, ListView):
     model = Multa
     template_name = 'fines/fine_list.html'
     context_object_name = 'multas'
+    paginate_by = 50
+    
+    def get_queryset(self):
+        return Multa.objects.select_related(
+            'motorista', 'veiculo', 'viagem'
+        ).order_by('-data')
 
 class MultaCreateView(LoginRequiredMixin, CreateView):
     model = Multa
@@ -148,6 +124,12 @@ class ManutencaoListView(LoginRequiredMixin, ListView):
     model = Manutencao
     template_name = 'maintenance/maintenance_list.html'
     context_object_name = 'manutencoes'
+    paginate_by = 50
+    
+    def get_queryset(self):
+        return Manutencao.objects.select_related(
+            'veiculo'
+        ).order_by('-data')
 
 class ManutencaoCreateView(LoginRequiredMixin, CreateView):
     model = Manutencao
@@ -165,3 +147,32 @@ class ManutencaoDeleteView(LoginRequiredMixin, DeleteView):
     model = Manutencao
     template_name = 'maintenance/maintenance_confirm_delete.html'
     success_url = reverse_lazy('manutencao_list')
+
+# Report Export Views
+def relatorio_viagens_pdf(request):
+    """Exporta relatório de viagens em PDF"""
+    viagens = Viagem.objects.select_related('motorista', 'veiculo').order_by('-data')
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="relatorio_viagens.pdf"'
+    return gerar_relatorio_viagens_pdf(viagens, response)
+
+def relatorio_viagens_excel(request):
+    """Exporta relatório de viagens em Excel"""
+    viagens = Viagem.objects.select_related('motorista', 'veiculo').order_by('-data')
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="relatorio_viagens.xlsx"'
+    return gerar_relatorio_viagens_excel(viagens, response)
+
+def relatorio_multas_pdf(request):
+    """Exporta relatório de multas em PDF"""
+    multas = Multa.objects.select_related('motorista', 'veiculo').order_by('-data')
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="relatorio_multas.pdf"'
+    return gerar_relatorio_multas_pdf(multas, response)
+
+def relatorio_multas_excel(request):
+    """Exporta relatório de multas em Excel"""
+    multas = Multa.objects.select_related('motorista', 'veiculo').order_by('-data')
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="relatorio_multas.xlsx"'
+    return gerar_relatorio_multas_excel(multas, response)

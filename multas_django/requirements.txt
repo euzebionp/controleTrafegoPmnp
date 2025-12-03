@@ -6,3 +6,5 @@ django-crispy-forms
 crispy-bootstrap5
 plotly
 pandas
+django-filter>=23.0
+openpyxl>=3.1
