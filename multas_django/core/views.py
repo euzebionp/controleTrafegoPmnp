@@ -213,19 +213,19 @@ def relatorio_manutencoes_pdf(request):
     
     return generate_pdf_report("Relatório de Manutenções", data, headers, "relatorio_manutencoes.pdf")
 
-# def relatorio_viagens_pdf(request):
-#     """Exporta relatório de viagens em PDF"""
-#     viagens = Viagem.objects.select_related('motorista', 'veiculo').order_by('-data')
-#     headers = ['Data', 'Saída', 'Chegada', 'Motorista', 'Veículo', 'Destino']
-#     data = []
-#     for v in viagens:
-#         data.append([
-#             v.data.strftime('%d/%m/%Y'),
-#             v.hora_saida.strftime('%H:%M') if v.hora_saida else '-',
-#             v.hora_chegada.strftime('%H:%M') if v.hora_chegada else '-',
-#             v.motorista.nome if v.motorista else '-',
-#             v.veiculo.placa if v.veiculo else '-',
-#             v.destino
-#         ])
-#     return generate_pdf_report("Relatório de Viagens", data, headers, "relatorio_viagens.pdf")
+def relatorio_viagens_pdf(request):
+    """Exporta relatório de viagens em PDF"""
+    viagens = Viagem.objects.select_related('motorista', 'veiculo').order_by('-data')
+    headers = ['Data', 'Saída', 'Chegada', 'Motorista', 'Veículo', 'Destino']
+    data = []
+    for v in viagens:
+        data.append([
+            v.data.strftime('%d/%m/%Y'),
+            v.hora_saida.strftime('%H:%M') if v.hora_saida else '-',
+            v.hora_chegada.strftime('%H:%M') if v.hora_chegada else '-',
+            v.motorista.nome if v.motorista else '-',
+            v.veiculo.placa if v.veiculo else '-',
+            v.destino
+        ])
+    return generate_pdf_report("Relatório de Viagens", data, headers, "relatorio_viagens.pdf")
 
