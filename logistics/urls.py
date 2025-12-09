@@ -41,4 +41,12 @@ urlpatterns = [
     
     # Reports
     path('relatorios/', views.reports_view, name='reports'),
+    
+    # PDF Reports
+    path('motoristas/pdf/', views.motorista_pdf, name='motorista_pdf'),
+    path('veiculos/pdf/', views.veiculo_pdf, name='veiculo_pdf'),
+    path('multas/pdf/', views.multa_pdf, name='multa_pdf'),
+    path('manutencoes/pdf/', views.manutencao_pdf, name='manutencao_pdf'),
+    path('viagens/pdf/', views.viagem_pdf, name='viagem_pdf'),
 ]
+

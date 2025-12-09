@@ -10,6 +10,19 @@ from django.http import HttpResponse
 from .models import Motorista, Veiculo, Viagem, Multa, Manutencao
 from .forms import ViagemForm
 from .reports import generate_pdf_report
+
+# Dashboard View
+class DashboardView(LoginRequiredMixin, TemplateView):
+    template_name = 'dashboard.html'
+
+# Report Selection View
+class ReportSelectionView(LoginRequiredMixin, TemplateView):
+    template_name = 'reports/report_selection.html'
+
+# Motorista Views
+class MotoristaListView(LoginRequiredMixin, ListView):
+    model = Motorista
+    template_name = 'drivers/driver_list.html'
     context_object_name = 'motoristas'
 
 class MotoristaCreateView(LoginRequiredMixin, CreateView):

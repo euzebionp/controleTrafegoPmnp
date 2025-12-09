@@ -6,6 +6,7 @@ from .views import (
     ViagemListView, ViagemCreateView, ViagemUpdateView, ViagemDeleteView,
     MultaListView, MultaCreateView, MultaUpdateView, MultaDeleteView,
     ManutencaoListView, ManutencaoCreateView, ManutencaoUpdateView, ManutencaoDeleteView,
+    ReportSelectionView,
     relatorio_motoristas_pdf, relatorio_veiculos_pdf, relatorio_multas_pdf, relatorio_manutencoes_pdf,
     relatorio_viagens_pdf
 )
@@ -44,9 +45,11 @@ urlpatterns = [
     path('manutencoes/<int:pk>/excluir/', ManutencaoDeleteView.as_view(), name='manutencao_delete'),
     
     # Report URLs
+    path('relatorios/', ReportSelectionView.as_view(), name='report_selection'),
     path('relatorios/motoristas/pdf/', relatorio_motoristas_pdf, name='relatorio_motoristas_pdf'),
     path('relatorios/veiculos/pdf/', relatorio_veiculos_pdf, name='relatorio_veiculos_pdf'),
     path('relatorios/multas/pdf/', relatorio_multas_pdf, name='relatorio_multas_pdf'),
     path('relatorios/manutencoes/pdf/', relatorio_manutencoes_pdf, name='relatorio_manutencoes_pdf'),
     path('relatorios/viagens/pdf/', relatorio_viagens_pdf, name='relatorio_viagens_pdf'),
 ]
+

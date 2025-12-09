@@ -6,9 +6,14 @@
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1><i class="bi bi-car-front"></i> Veículos</h1>
-        <a href="{% url 'veiculo_create' %}" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Novo Veículo
-        </a>
+        <div>
+            <a href="{% url 'veiculo_pdf' %}" class="btn btn-secondary me-2" target="_blank">
+                <i class="bi bi-file-pdf"></i> Imprimir PDF
+            </a>
+            <a href="{% url 'veiculo_create' %}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Novo Veículo
+            </a>
+        </div>
     </div>
     
     {% if veiculos %}

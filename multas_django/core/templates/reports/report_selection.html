@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}Relatórios - Gestão Logística{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="fas fa-file-pdf"></i> Relatórios em PDF</h2>
+        <p class="text-muted">Selecione o tipo de relatório que deseja gerar</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Relatório de Motoristas -->
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm hover-shadow">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="fas fa-users fa-3x text-primary"></i>
+                </div>
+                <h5 class="card-title">Motoristas</h5>
+                <p class="card-text text-muted">
+                    Relatório completo com todos os motoristas cadastrados, incluindo CPF, CNH e validade.
+                </p>
+                <a href="{% url 'relatorio_motoristas_pdf' %}" class="btn btn-primary w-100">
+                    <i class="fas fa-download"></i> Gerar PDF
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Relatório de Veículos -->
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm hover-shadow">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="fas fa-car fa-3x text-success"></i>
+                </div>
+                <h5 class="card-title">Veículos</h5>
+                <p class="card-text text-muted">
+                    Relatório com todos os veículos da frota, incluindo placa, modelo, ano e quilometragem.
+                </p>
+                <a href="{% url 'relatorio_veiculos_pdf' %}" class="btn btn-success w-100">
+                    <i class="fas fa-download"></i> Gerar PDF
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Relatório de Viagens -->
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm hover-shadow">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="fas fa-route fa-3x text-info"></i>
+                </div>
+                <h5 class="card-title">Viagens</h5>
+                <p class="card-text text-muted">
+                    Relatório de todas as viagens realizadas, com datas, horários, motoristas e destinos.
+                </p>
+                <a href="{% url 'relatorio_viagens_pdf' %}" class="btn btn-info w-100">
+                    <i class="fas fa-download"></i> Gerar PDF
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Relatório de Multas -->
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm hover-shadow">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="fas fa-exclamation-triangle fa-3x text-warning"></i>
+                </div>
+                <h5 class="card-title">Multas</h5>
+                <p class="card-text text-muted">
+                    Relatório de todas as multas registradas, incluindo datas, locais, motoristas e valores.
+                </p>
+                <a href="{% url 'relatorio_multas_pdf' %}" class="btn btn-warning w-100">
+                    <i class="fas fa-download"></i> Gerar PDF
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Relatório de Manutenções -->
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm hover-shadow">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="fas fa-tools fa-3x text-danger"></i>
+                </div>
+                <h5 class="card-title">Manutenções</h5>
+                <p class="card-text text-muted">
+                    Relatório de todas as manutenções realizadas, com veículos, tipos de serviço e valores.
+                </p>
+                <a href="{% url 'relatorio_manutencoes_pdf' %}" class="btn btn-danger w-100">
+                    <i class="fas fa-download"></i> Gerar PDF
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-shadow {
+        transition: all 0.3s ease;
+    }
+    
+    .hover-shadow:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+    
+    .card-body {
+        padding: 2rem;
+    }
+</style>
+{% endblock %}

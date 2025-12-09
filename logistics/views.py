@@ -7,6 +7,7 @@ from django.utils import timezone
 from datetime import timedelta
 from .models import Motorista, Veiculo, Viagem, Manutencao, Multa
 from .forms import MotoristaForm, VeiculoForm, ViagemForm, ManutencaoForm, MultaForm
+from . import reports
 
 
 # Authentication Views
@@ -385,3 +386,35 @@ def reports_view(request):
     }
     
     return render(request, 'logistics/reports.html', context)
+
+
+# PDF Report Views
+@login_required
+def motorista_pdf(request):
+    """Generate PDF report for drivers"""
+    return reports.generate_motoristas_pdf()
+
+
+@login_required
+def veiculo_pdf(request):
+    """Generate PDF report for vehicles"""
+    return reports.generate_veiculos_pdf()
+
+
+@login_required
+def multa_pdf(request):
+    """Generate PDF report for fines"""
+    return reports.generate_multas_pdf()
+
+
+@login_required
+def manutencao_pdf(request):
+    """Generate PDF report for maintenance records"""
+    return reports.generate_manutencoes_pdf()
+
+
+@login_required
+def viagem_pdf(request):
+    """Generate PDF report for travels"""
+    return reports.generate_viagens_pdf()
+

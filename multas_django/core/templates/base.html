@@ -37,6 +37,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'manutencao_list' %}">Manutenções</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'report_selection' %}"><i class="fas fa-file-pdf"></i> Relatórios</a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav">
                     {% if user.is_authenticated %}
