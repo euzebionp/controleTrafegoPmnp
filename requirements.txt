@@ -1,7 +1,25 @@
-Django>=4.2,<5.0
-pandas
-reportlab
-geopy
-django-crispy-forms
-crispy-bootstrap4
-pillow
+# Core Framework
+Django>=5.0,<5.1
+django-crispy-forms>=2.0
+crispy-bootstrap5
+
+# Data Processing
+pandas>=2.0.0
+openpyxl>=3.1.0
+
+# PDF & Reports
+reportlab>=4.0.0
+
+# Geo & Maps
+geopy>=2.4.0
+
+# Utilities
+pillow>=10.0.0
+django-filter>=23.0
+
+# New Infrastructure (Phased integration)
+djangorestframework>=3.14.0
+django-allauth>=0.58.0
+celery>=5.3.0
+redis>=5.0.0
+django-storages>=1.14.0
