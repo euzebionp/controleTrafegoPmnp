@@ -1,0 +1,1474 @@
+[
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$600000$nsZYLgVoNl1rRJ1z8mxAkF$qxBt6KMgHd+0zAe1TZpjy9SgCkD1OSK0rjzTaxDypAs=",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@example.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-12-01T13:33:42.464Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$600000$0Nc6NW9n4exO1B3TgFzqbY$jtHWciyothkdOJjfDgDPBRs56SevfEdcv2AUn+dPUdI=",
+    "last_login": "2025-12-01T18:28:49.421Z",
+    "is_superuser": true,
+    "username": "manager",
+    "first_name": "",
+    "last_name": "",
+    "email": "manager@example.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-12-01T18:23:32.786Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$600000$BSG6xodqB5K7gpUld0ZuXh$SoqdD20FaV11trcqhRJCVtun+TNiu7p37+ik6ZkBIdA=",
+    "last_login": "2025-12-03T18:10:03.295Z",
+    "is_superuser": true,
+    "username": "14082025",
+    "first_name": "",
+    "last_name": "",
+    "email": "olivertinoborges.euzebio@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-12-03T00:03:45.351Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "8a5mh64xk4plgwpsfa2vqs2y8vlhijr3",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2hAotDAu3fcMZIAZqRqalHZlvLsh6UK3_7333yLgsZdwNNrCksVVGHH53SKmJ9UO8gPrfZVprfu2RNkVedIm5zXT63a6fwcFW-k1o5oArJ7UYHJyzntvdE7GG4dATFoBs0Zi6xzrMY0GlCILiqPlAcTnC9U0N40:1vQjqX:gADEOjYXzNuuCmVqT5lVdtnDt5cQgdKc1hfHVTtFm7c",
+    "expire_date": "2025-12-17T10:12:29.797Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "bdxmwrqf5rf6l3vs66dpj1t8bg3r5nr0",
+  "fields": {
+    "session_data": ".eJxVjDsOwjAQBe_iGln-7cqmpOcM1trrxQGUSPlUiLtDpBTQvpl5L5VpW3veljbngdVZOXX63QrVRxt3wHcab5Ou07jOQ9G7og-66OvE7Xk53L-DTkv_1smhQQgYW2jRtUQ-VvEWaqxgC4NzyQOIYRJhKx4DoBErHCkiUlHvD8mQN7Q:1vQ8dl:AmnZn9v9kN5BQBxTqgDQ8dnyXgCWtXQonZuWkNNwres",
+    "expire_date": "2025-12-15T18:28:49.695Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "qtxixhof51ft8smc53e5qk1qnb6bbx6y",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2hAotDAu3fcMZIAZqRqalHZlvLsh6UK3_7333yLgsZdwNNrCksVVGHH53SKmJ9UO8gPrfZVprfu2RNkVedIm5zXT63a6fwcFW-k1o5oArJ7UYHJyzntvdE7GG4dATFoBs0Zi6xzrMY0GlCILiqPlAcTnC9U0N40:1vQrIh:Tp5TFEBoi-45Sv2LxTR5AEKoEq7Pjaq5qCNRQ4MR_Z8",
+    "expire_date": "2025-12-17T18:10:03.307Z"
+  }
+},
+{
+  "model": "sites.site",
+  "fields": {
+    "domain": "example.com",
+    "name": "example.com"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 1,
+  "fields": {
+    "nome": "EUZEBIO OLIVERTINO BORGES",
+    "cpf": "034.390.656-26",
+    "cnh": "00676539251",
+    "validade_cnh": "2032-03-04"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 2,
+  "fields": {
+    "nome": "FERNADO ALVES VILELA FERREIRA",
+    "cpf": "070.839.576-73",
+    "cnh": "02978337311",
+    "validade_cnh": "2033-11-07"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 3,
+  "fields": {
+    "nome": "AILTON DONIZETE RESENDE JUNIOR",
+    "cpf": "112.188.616-73",
+    "cnh": "05988433357",
+    "validade_cnh": "2034-06-13"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 4,
+  "fields": {
+    "nome": "BEATRIZ SILVA AMANCIO",
+    "cpf": "075.482.986-33",
+    "cnh": "07168400675",
+    "validade_cnh": "2035-04-11"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 5,
+  "fields": {
+    "nome": "CHRISTOPHER CUNHA SILVA ",
+    "cpf": "136.769.266-09",
+    "cnh": "06526904921",
+    "validade_cnh": "2034-07-11"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 6,
+  "fields": {
+    "nome": "EMANOEL ALESSON DA SILVA ",
+    "cpf": "146.354.936-95",
+    "cnh": "06819790013",
+    "validade_cnh": "2034-11-12"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 7,
+  "fields": {
+    "nome": "LEIDIANE MARIA DE OLIVEIRA",
+    "cpf": "077.794.206-20",
+    "cnh": "04509868906",
+    "validade_cnh": "2034-07-23"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 8,
+  "fields": {
+    "nome": "LEONARDO FERNANDO CRISTO DA SILVA",
+    "cpf": "146.707.146-35",
+    "cnh": "07024163172",
+    "validade_cnh": "2025-11-12"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 9,
+  "fields": {
+    "nome": "LUCAS JOSÉ FERREIRA ",
+    "cpf": "132.543.256-30",
+    "cnh": "06552707228",
+    "validade_cnh": "2034-05-21"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 10,
+  "fields": {
+    "nome": "JOÃO LUIZ FERREIRA",
+    "cpf": "706.841.706-04",
+    "cnh": "01870386000",
+    "validade_cnh": "2026-06-29"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 11,
+  "fields": {
+    "nome": "WESLLEY PEREIRA DE PAULA",
+    "cpf": "015.903.976-22",
+    "cnh": "07292852207",
+    "validade_cnh": "2032-09-27"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 12,
+  "fields": {
+    "nome": "ELSON NICODEMOS",
+    "cpf": "059.358886-02",
+    "cnh": "04179445325",
+    "validade_cnh": "2035-10-14"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 13,
+  "fields": {
+    "nome": "JOSÉ FERNADES DOS SANTOS",
+    "cpf": "537.347.424-04",
+    "cnh": "00193164305",
+    "validade_cnh": "2029-10-07"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 14,
+  "fields": {
+    "nome": "ADEMIR RAYMUNDODA SILVA",
+    "cpf": "953812.016-72",
+    "cnh": "00783573821",
+    "validade_cnh": "2026-02-12"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 15,
+  "fields": {
+    "nome": "JEAN TOMÉ ALVES ",
+    "cpf": "094.720.116-59",
+    "cnh": "05694413273",
+    "validade_cnh": "2035-10-21"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 16,
+  "fields": {
+    "nome": "REGINALDO JOSÉ DA SILVA ",
+    "cpf": "048.468.916-90",
+    "cnh": "04463818190",
+    "validade_cnh": "2035-08-14"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 17,
+  "fields": {
+    "nome": "CLAUDINEI CARDOSO ",
+    "cpf": "199.536.278-60",
+    "cnh": "02496906991",
+    "validade_cnh": "2032-09-21"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 18,
+  "fields": {
+    "nome": "LUIZ ANTONIO OLIVERTINO",
+    "cpf": "633.905.406-44",
+    "cnh": "04724752408",
+    "validade_cnh": "2026-07-01"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 19,
+  "fields": {
+    "nome": "WERGAS FERNANDES DA SILVA ",
+    "cpf": "069.039.506-05",
+    "cnh": "03660625980",
+    "validade_cnh": "2031-06-11"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 20,
+  "fields": {
+    "nome": "INDEFINIDO",
+    "cpf": "000.000.123-01",
+    "cnh": "12345612",
+    "validade_cnh": "2025-11-26"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 21,
+  "fields": {
+    "nome": "RONIVON JOSÉ DA SILVA",
+    "cpf": "928.157.316-49",
+    "cnh": "00815963705",
+    "validade_cnh": "2032-01-12"
+  }
+},
+{
+  "model": "logistics.motorista",
+  "pk": 22,
+  "fields": {
+    "nome": "JOSÉ APARECIDO DA SILVA BRAZ",
+    "cpf": "024.858.994-60",
+    "cnh": "05187835270",
+    "validade_cnh": "2033-08-09"
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 1,
+  "fields": {
+    "placa": "TCF7I53",
+    "modelo": "POLO ",
+    "ano": 2024,
+    "renavam": "1401771596",
+    "km_atual": 298.91999999999996
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 2,
+  "fields": {
+    "placa": "TXO4B96",
+    "modelo": "FIAT STRADA TEC/FORM EM",
+    "ano": 2025,
+    "renavam": "01463973460",
+    "km_atual": 0.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 3,
+  "fields": {
+    "placa": "TDU1H12",
+    "modelo": "FIAT  TORO FREEDON",
+    "ano": 2025,
+    "renavam": "01428525235",
+    "km_atual": 0.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 4,
+  "fields": {
+    "placa": "TDS9E07",
+    "modelo": "FIAT  TORO FREEDON T270 AT6",
+    "ano": 2025,
+    "renavam": "01427677295",
+    "km_atual": 0.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 5,
+  "fields": {
+    "placa": "TDS9E08",
+    "modelo": "FIAT STRADA ULTRA T200AT",
+    "ano": 2025,
+    "renavam": "01427679824",
+    "km_atual": 0.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 6,
+  "fields": {
+    "placa": "TXA7E90",
+    "modelo": "TOYOTA COROLLA XEI",
+    "ano": 2025,
+    "renavam": "01452111860",
+    "km_atual": 0.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 7,
+  "fields": {
+    "placa": "TXK9G63",
+    "modelo": "FIAT STRADA TECFORM EM AMBULANCIA",
+    "ano": 2025,
+    "renavam": "01463617558",
+    "km_atual": 0.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 8,
+  "fields": {
+    "placa": "TXK9G62",
+    "modelo": "FIAT STRADA TECFORM EM AMBULANCIA",
+    "ano": 2025,
+    "renavam": "01463970690",
+    "km_atual": 0.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 9,
+  "fields": {
+    "placa": "TWI3E83",
+    "modelo": "FIAT ARGO DRIVE 1.3 AT ",
+    "ano": 2025,
+    "renavam": "01450126909",
+    "km_atual": 7818.75
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 10,
+  "fields": {
+    "placa": "SHI8H76",
+    "modelo": "VW GOL MPI",
+    "ano": 2022,
+    "renavam": "01343010524",
+    "km_atual": 135265.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 11,
+  "fields": {
+    "placa": "TWI3E75",
+    "modelo": "FIAT ARGO DRIVE  1.3",
+    "ano": 2025,
+    "renavam": "01450126763",
+    "km_atual": 160.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 12,
+  "fields": {
+    "placa": "TWI3E79",
+    "modelo": "FIAT ARGO DRIVE  1.3",
+    "ano": 2025,
+    "renavam": "01450126879",
+    "km_atual": 0.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 13,
+  "fields": {
+    "placa": "SIB3G93",
+    "modelo": "CHEV/SPIN 1.8 AT ",
+    "ano": 2023,
+    "renavam": "01350411156",
+    "km_atual": 0.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 14,
+  "fields": {
+    "placa": "SHD2E46",
+    "modelo": "CHEV/SPIN 1.8 AT ",
+    "ano": 2023,
+    "renavam": "01338898300",
+    "km_atual": 160.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 15,
+  "fields": {
+    "placa": "TER2A71",
+    "modelo": "CHEV/SPIN 1.8 AT ",
+    "ano": 2025,
+    "renavam": "01443970244",
+    "km_atual": 33014.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 16,
+  "fields": {
+    "placa": "TEV2D66",
+    "modelo": "FIAT STRADA ULTRA T200AT",
+    "ano": 2025,
+    "renavam": "01446622077",
+    "km_atual": 0.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 17,
+  "fields": {
+    "placa": "SYL2J27",
+    "modelo": "VW POLO TRACK MA",
+    "ano": 2023,
+    "renavam": "01375614352",
+    "km_atual": 160.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 18,
+  "fields": {
+    "placa": "RTE8I84",
+    "modelo": "GOL 1.0 OL MC4",
+    "ano": 2021,
+    "renavam": "01281995450",
+    "km_atual": 0.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 19,
+  "fields": {
+    "placa": "RTA9A04",
+    "modelo": "GOL 1.0 OL MC4",
+    "ano": 2021,
+    "renavam": "01281993910",
+    "km_atual": 0.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 20,
+  "fields": {
+    "placa": "RTE8I83",
+    "modelo": "VW GOL 1.0 L MC4",
+    "ano": 2021,
+    "renavam": "01281993880",
+    "km_atual": 160.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 21,
+  "fields": {
+    "placa": "SHI8H80",
+    "modelo": "VW GOL 1.0 MPI",
+    "ano": 2022,
+    "renavam": "01343012446",
+    "km_atual": 107509.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 22,
+  "fields": {
+    "placa": "SHI8H77",
+    "modelo": "VW GOL 1.0 MPI",
+    "ano": 2022,
+    "renavam": "01343011865",
+    "km_atual": 135174.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 23,
+  "fields": {
+    "placa": "OPY8497",
+    "modelo": "ONIBUS GRANMICRO ",
+    "ano": 2017,
+    "renavam": "01178836859",
+    "km_atual": 227749.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 24,
+  "fields": {
+    "placa": "HKZ4H31",
+    "modelo": "MERCEDES BENS 710",
+    "ano": 2010,
+    "renavam": "00255502478",
+    "km_atual": 1841889.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 25,
+  "fields": {
+    "placa": "OWW6730",
+    "modelo": "MERCEDES BENS ATTRON 2729",
+    "ano": 2013,
+    "renavam": "00994984855",
+    "km_atual": 290583.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 26,
+  "fields": {
+    "placa": "RTU3A68",
+    "modelo": "NISSAN FRONTIER ATACK 4X4",
+    "ano": 2021,
+    "renavam": "01288362754",
+    "km_atual": 97587.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 27,
+  "fields": {
+    "placa": "RTU3A63",
+    "modelo": "NISSAN FRONTIER ATACK 4X4",
+    "ano": 2021,
+    "renavam": "01288362819",
+    "km_atual": 110059.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 28,
+  "fields": {
+    "placa": "DHD2E44",
+    "modelo": "SPIN 1.8 AT ",
+    "ano": 2022,
+    "renavam": "01338891216",
+    "km_atual": 205610.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 29,
+  "fields": {
+    "placa": "QOQ1423",
+    "modelo": "PEGEOUT CITROEN AIRCROSS",
+    "ano": 2017,
+    "renavam": "01157625468",
+    "km_atual": 91428.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 30,
+  "fields": {
+    "placa": "QPN3003",
+    "modelo": "FIAT FIORINO ATENNA AMBULANCIA",
+    "ano": 2018,
+    "renavam": "01170434999",
+    "km_atual": 425048.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 31,
+  "fields": {
+    "placa": "ACG6F81",
+    "modelo": "GM D20 CUSTON S",
+    "ano": 1991,
+    "renavam": "00601068580",
+    "km_atual": 765800.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 32,
+  "fields": {
+    "placa": "TXW2F69",
+    "modelo": "FIAT MOB TRACKING 1.0 MT",
+    "ano": 2025,
+    "renavam": "01451499830",
+    "km_atual": 120.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 33,
+  "fields": {
+    "placa": "TXW2F71",
+    "modelo": "CHEV SPIN 1.8 LT AT LTZ",
+    "ano": 2025,
+    "renavam": "01467882167",
+    "km_atual": 450.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 34,
+  "fields": {
+    "placa": "TXW2F74",
+    "modelo": "CHEV SPIN 1.8 LT AT LTZ",
+    "ano": 2025,
+    "renavam": "01467884356",
+    "km_atual": 450.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 35,
+  "fields": {
+    "placa": "SHR9H73",
+    "modelo": "VW NEOBUS 15.190 ESCOLAR",
+    "ano": 2022,
+    "renavam": "01336771345",
+    "km_atual": 804927.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 36,
+  "fields": {
+    "placa": "GVN7003",
+    "modelo": "M. BENS /L 1113",
+    "ano": 1974,
+    "renavam": "00239514785",
+    "km_atual": 100000.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 37,
+  "fields": {
+    "placa": "BJF4681",
+    "modelo": "M. BENS /L 1113",
+    "ano": 1979,
+    "renavam": "00343792559",
+    "km_atual": 36882.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 38,
+  "fields": {
+    "placa": "RMZ2G25",
+    "modelo": "RENAUT MASTER RAYTEC AMBU",
+    "ano": 2021,
+    "renavam": "01260512360",
+    "km_atual": 120690.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 39,
+  "fields": {
+    "placa": "TXI8I94",
+    "modelo": "MERC.BENS 417 JI VAN",
+    "ano": 2024,
+    "renavam": "01461826591",
+    "km_atual": 4034.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 40,
+  "fields": {
+    "placa": "TXF3D59",
+    "modelo": "M.BENS ACCELO 1117",
+    "ano": 2025,
+    "renavam": "01460192459",
+    "km_atual": 160.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 41,
+  "fields": {
+    "placa": "SHE3I36",
+    "modelo": "FORD TRANSIT RAYTEC",
+    "ano": 2022,
+    "renavam": "01339242947",
+    "km_atual": 126093.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 42,
+  "fields": {
+    "placa": "SHI8H83",
+    "modelo": "FORD TRANSIT RAYTEC",
+    "ano": 2022,
+    "renavam": "01343013736",
+    "km_atual": 159069.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 43,
+  "fields": {
+    "placa": "UAB2G86",
+    "modelo": "MB ATEGO 1729 LIXO",
+    "ano": 2024,
+    "renavam": "01454729624",
+    "km_atual": 691.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 44,
+  "fields": {
+    "placa": "UAB2G88",
+    "modelo": "M.BENS ATEGO 1729 LIXO",
+    "ano": 2024,
+    "renavam": "01454730223",
+    "km_atual": 664.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 45,
+  "fields": {
+    "placa": "TZA1C56",
+    "modelo": "M.BENS ATEGO 2730 CAÇAMBA",
+    "ano": 2025,
+    "renavam": "01453050024",
+    "km_atual": 875.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 46,
+  "fields": {
+    "placa": "TZA1C64",
+    "modelo": "M.BENS ATEGO 2730 CAÇAMBA",
+    "ano": 2025,
+    "renavam": "01453051152",
+    "km_atual": 862.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 47,
+  "fields": {
+    "placa": "SYV5G03",
+    "modelo": "RENAUT MASTER L1 RAY AMB",
+    "ano": 2024,
+    "renavam": "01385680269",
+    "km_atual": 130158.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 48,
+  "fields": {
+    "placa": "PYL2653",
+    "modelo": "IVECO TRACTOR 260E28",
+    "ano": 2016,
+    "renavam": "01098954430",
+    "km_atual": 130000.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 49,
+  "fields": {
+    "placa": "TDT2D24",
+    "modelo": "CHEV SPIN 1.8 AT LTZ",
+    "ano": 2024,
+    "renavam": "01426845194",
+    "km_atual": 32765.0
+  }
+},
+{
+  "model": "logistics.veiculo",
+  "pk": 50,
+  "fields": {
+    "placa": "TXW2H47",
+    "modelo": "FIAT TITANO RANCK",
+    "ano": 2025,
+    "renavam": "01467886928",
+    "km_atual": 450.0
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 1,
+  "fields": {
+    "data": "2025-11-25",
+    "motorista": 9,
+    "veiculo": 12,
+    "origem": "",
+    "destino": "UBERABA",
+    "hora_saida": "05:00:00",
+    "distancia": 0.0,
+    "km_atual": null
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 2,
+  "fields": {
+    "data": "2025-11-26",
+    "motorista": 17,
+    "veiculo": 39,
+    "origem": "",
+    "destino": "UBERLANDIA",
+    "hora_saida": "05:00:00",
+    "distancia": 0.0,
+    "km_atual": null
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 3,
+  "fields": {
+    "data": "2025-11-26",
+    "motorista": 15,
+    "veiculo": 23,
+    "origem": "",
+    "destino": "UBERLANDIA",
+    "hora_saida": "10:00:00",
+    "distancia": 0.0,
+    "km_atual": null
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 4,
+  "fields": {
+    "data": "2025-11-26",
+    "motorista": 12,
+    "veiculo": 20,
+    "origem": "",
+    "destino": "UBERABA",
+    "hora_saida": "08:30:00",
+    "distancia": 0.0,
+    "km_atual": null
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 5,
+  "fields": {
+    "data": "2025-11-26",
+    "motorista": 21,
+    "veiculo": 14,
+    "origem": "",
+    "destino": "UBERLANDIA ",
+    "hora_saida": "05:00:00",
+    "distancia": 80.0,
+    "km_atual": null
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 6,
+  "fields": {
+    "data": "2025-11-26",
+    "motorista": 22,
+    "veiculo": 11,
+    "origem": "",
+    "destino": "BARRETOS",
+    "hora_saida": "10:00:00",
+    "distancia": 80.0,
+    "km_atual": null
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 7,
+  "fields": {
+    "data": "2025-11-26",
+    "motorista": 16,
+    "veiculo": 49,
+    "origem": "",
+    "destino": "UBERLANDIA",
+    "hora_saida": "05:00:00",
+    "distancia": 80.0,
+    "km_atual": null
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 8,
+  "fields": {
+    "data": "2025-11-26",
+    "motorista": 18,
+    "veiculo": 20,
+    "origem": "",
+    "destino": "UBERLANDIA",
+    "hora_saida": "06:00:00",
+    "distancia": 80.0,
+    "km_atual": null
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 9,
+  "fields": {
+    "data": "2025-11-26",
+    "motorista": 7,
+    "veiculo": 17,
+    "origem": "",
+    "destino": "UBERABA",
+    "hora_saida": "10:00:00",
+    "distancia": 80.0,
+    "km_atual": null
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 10,
+  "fields": {
+    "data": "2025-11-26",
+    "motorista": 6,
+    "veiculo": 1,
+    "origem": "",
+    "destino": "UBERABA",
+    "hora_saida": "05:00:00",
+    "distancia": 80.0,
+    "km_atual": null
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 11,
+  "fields": {
+    "data": "2025-11-27",
+    "motorista": 6,
+    "veiculo": 39,
+    "origem": "",
+    "destino": "UBERABA",
+    "hora_saida": "05:00:00",
+    "distancia": 0.0,
+    "km_atual": null
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 12,
+  "fields": {
+    "data": "2025-11-27",
+    "motorista": 11,
+    "veiculo": 20,
+    "origem": "",
+    "destino": "UBERLANDIA",
+    "hora_saida": "05:00:00",
+    "distancia": 0.0,
+    "km_atual": null
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 13,
+  "fields": {
+    "data": "2025-11-27",
+    "motorista": 7,
+    "veiculo": 17,
+    "origem": "",
+    "destino": "ARAGUARI",
+    "hora_saida": "05:00:00",
+    "distancia": 0.0,
+    "km_atual": null
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 14,
+  "fields": {
+    "data": "2025-11-27",
+    "motorista": 21,
+    "veiculo": 14,
+    "origem": "",
+    "destino": "UBERLANDIA",
+    "hora_saida": "10:00:00",
+    "distancia": 0.0,
+    "km_atual": null
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 15,
+  "fields": {
+    "data": "2025-11-27",
+    "motorista": 22,
+    "veiculo": 11,
+    "origem": "",
+    "destino": "BARRETOS",
+    "hora_saida": "04:00:00",
+    "distancia": 0.0,
+    "km_atual": null
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 16,
+  "fields": {
+    "data": "2025-11-27",
+    "motorista": 16,
+    "veiculo": 49,
+    "origem": "",
+    "destino": "ARAGUARI",
+    "hora_saida": "04:00:00",
+    "distancia": 0.0,
+    "km_atual": null
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 17,
+  "fields": {
+    "data": "2025-11-27",
+    "motorista": 9,
+    "veiculo": 15,
+    "origem": "",
+    "destino": "ARAGUARI",
+    "hora_saida": "04:00:00",
+    "distancia": 0.0,
+    "km_atual": null
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 18,
+  "fields": {
+    "data": "2025-11-27",
+    "motorista": 8,
+    "veiculo": 23,
+    "origem": "",
+    "destino": "UBERLANDIA",
+    "hora_saida": "05:00:00",
+    "distancia": 0.0,
+    "km_atual": null
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 19,
+  "fields": {
+    "data": "2025-11-27",
+    "motorista": 12,
+    "veiculo": 10,
+    "origem": "",
+    "destino": "UBERLANDIA",
+    "hora_saida": "05:00:00",
+    "distancia": 0.0,
+    "km_atual": null
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 20,
+  "fields": {
+    "data": "2025-11-27",
+    "motorista": 18,
+    "veiculo": 41,
+    "origem": "",
+    "destino": "UBERLANDIA",
+    "hora_saida": "10:00:00",
+    "distancia": 0.0,
+    "km_atual": null
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 21,
+  "fields": {
+    "data": "2025-11-27",
+    "motorista": 17,
+    "veiculo": 10,
+    "origem": "UBERLANDIA",
+    "destino": "13:00",
+    "hora_saida": "08:00:00",
+    "distancia": 0.0,
+    "km_atual": 0.0
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 22,
+  "fields": {
+    "data": "2025-11-27",
+    "motorista": 3,
+    "veiculo": 1,
+    "origem": "NOVA PONTE",
+    "destino": "UBERLANDIA",
+    "hora_saida": "13:00:00",
+    "distancia": 69.46,
+    "km_atual": null
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 23,
+  "fields": {
+    "data": "2025-12-01",
+    "motorista": 1,
+    "veiculo": 10,
+    "origem": "Nova Ponte",
+    "destino": "08:00",
+    "hora_saida": "08:00:00",
+    "distancia": 0.0,
+    "km_atual": 135265.0
+  }
+},
+{
+  "model": "logistics.viagem",
+  "pk": 24,
+  "fields": {
+    "data": "2025-12-02",
+    "motorista": 9,
+    "veiculo": 15,
+    "origem": "NOVA PONTE",
+    "destino": "ARAGUARI",
+    "hora_saida": "04:00:00",
+    "distancia": 0.0,
+    "km_atual": 33014.0
+  }
+},
+{
+  "model": "logistics.manutencao",
+  "pk": 1,
+  "fields": {
+    "veiculo": 39,
+    "data": "2025-11-26",
+    "tipo_servico": "Troca de Óleo",
+    "descricao": "PRIMEIRA REVISÃO ",
+    "km_realizado": 4034.0,
+    "proximo_servico_km": 10000.0,
+    "proximo_servico_data": "2026-05-25",
+    "valor": "0.00"
+  }
+},
+{
+  "model": "logistics.manutencao",
+  "pk": 2,
+  "fields": {
+    "veiculo": 40,
+    "data": "2025-11-26",
+    "tipo_servico": "Troca de Óleo",
+    "descricao": "PRIMEIRA REVISÃO",
+    "km_realizado": 160.0,
+    "proximo_servico_km": 10160.0,
+    "proximo_servico_data": "2026-05-25",
+    "valor": "0.00"
+  }
+},
+{
+  "model": "logistics.manutencao",
+  "pk": 3,
+  "fields": {
+    "veiculo": 43,
+    "data": "2025-11-26",
+    "tipo_servico": "Troca de Óleo",
+    "descricao": "PRIMEIRA REVISÃO",
+    "km_realizado": 691.0,
+    "proximo_servico_km": 10000.0,
+    "proximo_servico_data": "2026-05-25",
+    "valor": "0.10"
+  }
+},
+{
+  "model": "logistics.manutencao",
+  "pk": 4,
+  "fields": {
+    "veiculo": 44,
+    "data": "2025-11-26",
+    "tipo_servico": "Troca de Óleo",
+    "descricao": "PRIMEIRA REVISÃO",
+    "km_realizado": 664.0,
+    "proximo_servico_km": 10664.0,
+    "proximo_servico_data": "2026-05-25",
+    "valor": "1.00"
+  }
+},
+{
+  "model": "logistics.manutencao",
+  "pk": 5,
+  "fields": {
+    "veiculo": 45,
+    "data": "2025-11-26",
+    "tipo_servico": "Troca de Óleo",
+    "descricao": "PRIMEIRA REVISÃO",
+    "km_realizado": 875.0,
+    "proximo_servico_km": 10000.0,
+    "proximo_servico_data": "2026-05-25",
+    "valor": "0.00"
+  }
+},
+{
+  "model": "logistics.manutencao",
+  "pk": 6,
+  "fields": {
+    "veiculo": 46,
+    "data": "2025-11-26",
+    "tipo_servico": "Troca de Óleo",
+    "descricao": "PRIMEIRA REVISÃO",
+    "km_realizado": 862.0,
+    "proximo_servico_km": 10000.0,
+    "proximo_servico_data": "2026-05-25",
+    "valor": "0.00"
+  }
+},
+{
+  "model": "logistics.manutencao",
+  "pk": 7,
+  "fields": {
+    "veiculo": 17,
+    "data": "2025-11-27",
+    "tipo_servico": "Troca de Óleo",
+    "descricao": "TROCA DE OLEO ",
+    "km_realizado": 80.0,
+    "proximo_servico_km": 106000.0,
+    "proximo_servico_data": "2026-05-26",
+    "valor": "0.00"
+  }
+},
+{
+  "model": "logistics.manutencao",
+  "pk": 8,
+  "fields": {
+    "veiculo": 9,
+    "data": "2025-11-27",
+    "tipo_servico": "Troca de Óleo",
+    "descricao": "REVISÃO 10.000 KM",
+    "km_realizado": 144.25,
+    "proximo_servico_km": 10144.25,
+    "proximo_servico_data": "2026-05-26",
+    "valor": "0.00"
+  }
+},
+{
+  "model": "logistics.manutencao",
+  "pk": 9,
+  "fields": {
+    "veiculo": 22,
+    "data": "2005-12-02",
+    "tipo_servico": "Troca de Óleo",
+    "descricao": "",
+    "km_realizado": 135500.0,
+    "proximo_servico_km": 145500.0,
+    "proximo_servico_data": null,
+    "valor": "0.01"
+  }
+},
+{
+  "model": "logistics.manutencao",
+  "pk": 10,
+  "fields": {
+    "veiculo": 15,
+    "data": "2025-12-01",
+    "tipo_servico": "Troca de Óleo",
+    "descricao": "Troca de oleo",
+    "km_realizado": 20000.0,
+    "proximo_servico_km": 30000.0,
+    "proximo_servico_data": null,
+    "valor": "0.01"
+  }
+},
+{
+  "model": "logistics.manutencao",
+  "pk": 11,
+  "fields": {
+    "veiculo": 15,
+    "data": "2025-12-05",
+    "tipo_servico": "Revisão",
+    "descricao": "Revisão completa",
+    "km_realizado": 33825.0,
+    "proximo_servico_km": 40000.0,
+    "proximo_servico_data": null,
+    "valor": "0.01"
+  }
+},
+{
+  "model": "logistics.manutencao",
+  "pk": 12,
+  "fields": {
+    "veiculo": 9,
+    "data": "2025-12-08",
+    "tipo_servico": "Revisão",
+    "descricao": "revisão completa",
+    "km_realizado": 10800.0,
+    "proximo_servico_km": 20000.0,
+    "proximo_servico_data": null,
+    "valor": "0.10"
+  }
+},
+{
+  "model": "logistics.manutencao",
+  "pk": 13,
+  "fields": {
+    "veiculo": 12,
+    "data": "2025-12-05",
+    "tipo_servico": "Revisão",
+    "descricao": "Revisão completa",
+    "km_realizado": 31800.0,
+    "proximo_servico_km": 40000.0,
+    "proximo_servico_data": null,
+    "valor": "0.01"
+  }
+},
+{
+  "model": "logistics.manutencao",
+  "pk": 14,
+  "fields": {
+    "veiculo": 5,
+    "data": "2025-12-05",
+    "tipo_servico": "Revisão",
+    "descricao": "Revisão completa",
+    "km_realizado": 21465.0,
+    "proximo_servico_km": 30000.0,
+    "proximo_servico_data": null,
+    "valor": "0.01"
+  }
+},
+{
+  "model": "logistics.manutencao",
+  "pk": 15,
+  "fields": {
+    "veiculo": 20,
+    "data": "2025-12-09",
+    "tipo_servico": "Outros",
+    "descricao": "Completou nivel oleo motor",
+    "km_realizado": 111498.0,
+    "proximo_servico_km": 113750.0,
+    "proximo_servico_data": null,
+    "valor": "0.01"
+  }
+},
+{
+  "model": "logistics.manutencao",
+  "pk": 16,
+  "fields": {
+    "veiculo": 20,
+    "data": "2025-11-01",
+    "tipo_servico": "Troca de Óleo",
+    "descricao": "Troca óleo",
+    "km_realizado": 103751.0,
+    "proximo_servico_km": 113750.0,
+    "proximo_servico_data": null,
+    "valor": "0.01"
+  }
+},
+{
+  "model": "logistics.multa",
+  "pk": 1,
+  "fields": {
+    "data": "2025-08-18",
+    "hora_infracao": null,
+    "local": "anselmo alves dos santos 595",
+    "tipo_infracao": "Leve",
+    "descricao": "transitar em velocidade superior a maxima permitida ( renaif: 10575965746",
+    "motorista": 20,
+    "veiculo": 4,
+    "valor": "1.00",
+    "viagem": null
+  }
+},
+{
+  "model": "logistics.multa",
+  "pk": 2,
+  "fields": {
+    "data": "2025-08-12",
+    "hora_infracao": null,
+    "local": "anselmo alves dos santos 595",
+    "tipo_infracao": "Leve",
+    "descricao": "transitar em velocidade superior a maxima permitida ( renaif: 10566223228",
+    "motorista": 20,
+    "veiculo": 4,
+    "valor": "1.00",
+    "viagem": null
+  }
+},
+{
+  "model": "logistics.multa",
+  "pk": 3,
+  "fields": {
+    "data": "2025-08-14",
+    "hora_infracao": null,
+    "local": "afonso pena x rua prata",
+    "tipo_infracao": "Gravíssima",
+    "descricao": "avançar sinal vermelho do semaforo ",
+    "motorista": 8,
+    "veiculo": 23,
+    "valor": "1.00",
+    "viagem": null
+  }
+},
+{
+  "model": "logistics.multa",
+  "pk": 4,
+  "fields": {
+    "data": "2025-10-20",
+    "hora_infracao": null,
+    "local": "br 050 km 69",
+    "tipo_infracao": "Média",
+    "descricao": "transitar em velocidade superior a 20% da maxima permitida ",
+    "motorista": 5,
+    "veiculo": 14,
+    "valor": "1.00",
+    "viagem": null
+  }
+}
+]
