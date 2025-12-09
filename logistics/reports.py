@@ -403,7 +403,7 @@ def generate_viagens_pdf():
             f"{viagem.distancia:,.1f} km".replace(',', 'X').replace('.', ',').replace('X', '.')
         ])
     
-    table = Table(data, colWidths=[1.2*inch, 2*inch, 1.2*inch, 2*inch, 2*inch, 1.3*inch])
+    table = Table(data, colWidths=[1.2*inch, 3*inch, 1.2*inch, 1.5*inch, 1.5*inch, 1.3*inch])
     
     table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#9b59b6')),
