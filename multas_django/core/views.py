@@ -1,8 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.db.models import F, Count, Sum
+from django.db.models import F, Count, Sum, Q
 from django.db.models.functions import TruncMonth
 from django.utils import timezone
 from datetime import timedelta
@@ -229,16 +230,228 @@ def relatorio_manutencoes_pdf(request):
 def relatorio_viagens_pdf(request):
     """Exporta relatório de viagens em PDF"""
     viagens = Viagem.objects.select_related('motorista', 'veiculo').order_by('-data')
-    headers = ['Data', 'Saída', 'Chegada', 'Motorista', 'Veículo', 'Destino']
+    headers = ['Data', 'Saída', 'Motorista', 'Veículo', 'Destino']
     data = []
     for v in viagens:
         data.append([
             v.data.strftime('%d/%m/%Y'),
             v.hora_saida.strftime('%H:%M') if v.hora_saida else '-',
-            v.hora_chegada.strftime('%H:%M') if v.hora_chegada else '-',
             v.motorista.nome if v.motorista else '-',
             v.veiculo.placa if v.veiculo else '-',
             v.destino
         ])
     return generate_pdf_report("Relatório de Viagens", data, headers, "relatorio_viagens.pdf")
+
+
+# Excel Import/Export Views
+import openpyxl
+from django.views.generic import FormView, View
+from .forms import ViagemImportForm
+
+from openpyxl.worksheet.datavalidation import DataValidation
+
+class DownloadTravelTemplateView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "Modelo Importação Viagens"
+        
+        # Create hidden sheet for data validation options
+        ws_data = wb.create_sheet("Dados")
+        ws_data.sheet_state = 'hidden'
+        
+        # Fetch data
+        motoristas = Motorista.objects.all().order_by('nome')
+        veiculos = Veiculo.objects.all().order_by('modelo')
+        
+        driver_options = [f"{m.nome} - {m.cpf}" for m in motoristas]
+        vehicle_options = [f"{v.modelo} - {v.placa}" for v in veiculos]
+        
+        # Write data to hidden sheet (side by side)
+        max_rows = max(len(driver_options), len(vehicle_options))
+        for i in range(max_rows):
+            d_val = driver_options[i] if i < len(driver_options) else ""
+            v_val = vehicle_options[i] if i < len(vehicle_options) else ""
+            ws_data.append([d_val, v_val])
+            
+        # Headers
+        headers = ['Data (DD/MM/AAAA)', 'Hora Saida (HH:MM)', 'Motorista (Selecione)', 'Veiculo (Selecione)', 'Origem', 'Destino', 'Distancia (KM)', 'KM Final (Atual)']
+        ws.append(headers)
+        
+        # 1. Driver Validation (Column C)
+        if driver_options:
+            last_row = len(driver_options)
+            dv_driver = DataValidation(type="list", formula1=f"'Dados'!$A$1:$A${last_row}", allow_blank=True)
+            dv_driver.error = 'Por favor selecione um motorista da lista'
+            dv_driver.errorTitle = 'Motorista Inválido'
+            dv_driver.add(f'C2:C500')
+            ws.add_data_validation(dv_driver)
+
+        # 2. Vehicle Validation (Column D)
+        if vehicle_options:
+            last_row_v = len(vehicle_options)
+            dv_vehicle = DataValidation(type="list", formula1=f"'Dados'!$B$1:$B${last_row_v}", allow_blank=True)
+            dv_vehicle.error = 'Por favor selecione um veículo da lista'
+            dv_vehicle.errorTitle = 'Veículo Inválido'
+            dv_vehicle.add(f'D2:D500')
+            ws.add_data_validation(dv_vehicle)
+        
+        # Adjust column widths
+        for col in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']:
+            ws.column_dimensions[col].width = 15
+        ws.column_dimensions['C'].width = 30
+        ws.column_dimensions['D'].width = 25 # Wider for Model - Plate
+        
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=modelo_importacao_viagens.xlsx'
+        wb.save(response)
+        return response
+
+class ImportTravelView(LoginRequiredMixin, FormView):
+    template_name = 'travels/import_travels.html'
+    form_class = ViagemImportForm
+    success_url = reverse_lazy('viagem_list')
+    
+    def form_valid(self, form):
+        excel_file = form.cleaned_data['arquivo_excel']
+        try:
+            wb = openpyxl.load_workbook(excel_file)
+            ws = wb.active
+            
+            created_count = 0
+            errors = []
+            
+            # Skip header row
+            rows = list(ws.iter_rows(min_row=2, values_only=True))
+            
+            for row_idx, row in enumerate(rows, start=2):
+                # Check if row is empty
+                if not any(row): continue
+                
+                try:
+                    # Unpack expected 8 columns (if 8 exists, else provide default)
+                    # Helper to get value securely
+                    def get_col(idx):
+                        return row[idx] if idx < len(row) else None
+                    
+                    data_val = get_col(0)
+                    hora_val = get_col(1)
+                    cpf_val = get_col(2)
+                    placa_val = get_col(3)
+                    origem_val = get_col(4)
+                    destino_val = get_col(5)
+                    distancia_val = get_col(6)
+                    km_final_val = get_col(7)
+                    
+                    if not data_val or not hora_val or not cpf_val or not placa_val:
+                        errors.append(f"Linha {row_idx}: Campos obrigatórios (Data, Hora, Motorista, Placa) faltando.")
+                        continue
+
+                    # Parse 'Nome - CPF' if present
+                    raw_cpf = str(cpf_val)
+                    if " - " in raw_cpf:
+                        raw_cpf = raw_cpf.split(" - ")[-1]
+
+                    # Parse 'Modelo - Placa' if present
+                    raw_placa = str(placa_val)
+                    if " - " in raw_placa:
+                        raw_placa = raw_placa.split(" - ")[-1]
+                        
+                    # Clean data
+                    cpf = raw_cpf.replace('.', '').replace('-', '').strip()
+                    # Ensure CPF has 11 digits (pad with zeros if excel stripped them)
+                    if len(cpf) < 11:
+                         cpf = cpf.zfill(11)
+
+                    # Try searching with formatted CPF as well
+                    cpf_formatted = f"{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
+                         
+                    placa = str(raw_placa).replace('-', '').strip().upper()
+                    # Fallback for concatenated strings without separator (e.g., "MODELO PLACA")
+                    # If length > 7, assume the plate is at the end (standard plate is 7 chars)
+                    if len(placa) > 7:
+                        placa = placa[-7:]
+                    
+                    # Search valid foreign keys
+                    motorista = Motorista.objects.filter(Q(cpf=cpf) | Q(cpf=cpf_formatted)).first()
+                    if not motorista:
+                        errors.append(f"Linha {row_idx}: Motorista com CPF {cpf} não encontrado.")
+                        continue
+                        
+                    veiculo = Veiculo.objects.filter(placa=placa).first()
+                    if not veiculo:
+                        errors.append(f"Linha {row_idx}: Veículo com placa {placa} não encontrado.")
+                        continue
+                    
+                    # Handle Date/Time types from Excel
+                    # data_val should be datetime or date, hora_val time or datetime
+                    import datetime
+                    
+                    final_date = data_val
+                    if isinstance(data_val, str):
+                        # Try parsing string date if necessary
+                        pass # Let's hope excel gives dates
+                    
+                    final_time = hora_val
+                    if isinstance(hora_val, str):
+                        pass
+                        
+                    # Validate/Clean distance
+                    final_distancia = 0
+                    if distancia_val:
+                        try:
+                            if isinstance(distancia_val, str):
+                                final_distancia = float(distancia_val.replace(',', '.'))
+                            else:
+                                final_distancia = float(distancia_val)
+                        except (ValueError, TypeError):
+                            final_distancia = 0
+                            
+                    # Validate/Clean KM Final
+                    final_km_final = 0
+                    if km_final_val:
+                        try:
+                            if isinstance(km_final_val, str):
+                                final_km_final = float(km_final_val.replace(',', '.'))
+                            else:
+                                final_km_final = float(km_final_val)
+                        except (ValueError, TypeError):
+                            final_km_final = 0
+                        
+                    viagem = Viagem.objects.create(
+                        data=final_date,
+                        hora_saida=final_time,
+                        motorista=motorista,
+                        veiculo=veiculo,
+                        origem=origem_val,
+                        destino=destino_val,
+                        distancia=final_distancia,
+                        km_final=final_km_final
+                    )
+                    
+                    # Update Vehicle KM if provided and greater
+                    if final_km_final > float(veiculo.km_atual):
+                        veiculo.km_atual = final_km_final
+                        veiculo.save()
+                        
+                    created_count += 1
+                    
+                except Exception as e:
+                    errors.append(f"Linha {row_idx}: Erro inesperado - {str(e)}")
+            
+            if created_count > 0:
+                messages.success(self.request, f"{created_count} viagens importadas com sucesso!")
+            
+            if errors:
+                for err in errors[:5]: # Limit errors shown
+                    messages.warning(self.request, err)
+                if len(errors) > 5:
+                    messages.warning(self.request, f"E mais {len(errors)-5} erros. Verifique a planilha.")
+                    
+        except Exception as e:
+            messages.error(self.request, f"Erro ao ler arquivo: {str(e)}")
+            return self.form_invalid(form)
+            
+        return super().form_valid(form)
+
 

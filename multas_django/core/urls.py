@@ -8,7 +8,8 @@ from .views import (
     ManutencaoListView, ManutencaoCreateView, ManutencaoUpdateView, ManutencaoDeleteView,
     ReportSelectionView,
     relatorio_motoristas_pdf, relatorio_veiculos_pdf, relatorio_multas_pdf, relatorio_manutencoes_pdf,
-    relatorio_viagens_pdf
+    relatorio_viagens_pdf,
+    ImportTravelView, DownloadTravelTemplateView
 )
 
 urlpatterns = [
@@ -51,5 +52,9 @@ urlpatterns = [
     path('relatorios/multas/pdf/', relatorio_multas_pdf, name='relatorio_multas_pdf'),
     path('relatorios/manutencoes/pdf/', relatorio_manutencoes_pdf, name='relatorio_manutencoes_pdf'),
     path('relatorios/viagens/pdf/', relatorio_viagens_pdf, name='relatorio_viagens_pdf'),
+
+    # Import URLs
+    path('viagens/importar/', ImportTravelView.as_view(), name='viagem_import'),
+    path('viagens/modelo/', DownloadTravelTemplateView.as_view(), name='viagem_download_template'),
 ]
 

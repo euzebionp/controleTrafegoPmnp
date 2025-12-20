@@ -74,3 +74,11 @@ class MultaForm(forms.ModelForm):
             'valor': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
             'viagem': forms.Select(attrs={'class': 'form-control'}),
         }
+
+
+class ViagemImportForm(forms.Form):
+    arquivo_excel = forms.FileField(
+        label='Arquivo Excel',
+        help_text='Selecione o arquivo .xlsx com os dados das viagens',
+        widget=forms.ClearableFileInput(attrs={'class': 'form-control'})
+    )

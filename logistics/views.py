@@ -418,3 +418,115 @@ def viagem_pdf(request):
     """Generate PDF report for travels"""
     return reports.generate_viagens_pdf()
 
+
+# Excel Import
+import openpyxl
+from django.http import HttpResponse
+from django.views import View
+from django.views.generic import FormView
+from django.urls import reverse_lazy
+
+class DownloadTravelTemplateView(View):
+    def get(self, request, *args, **kwargs):
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "Modelo Importação Viagens"
+        
+        # Headers
+        headers = ['Data (DD/MM/AAAA)', 'Hora Saida (HH:MM)', 'CPF Motorista (apenas números)', 'Placa Veiculo', 'Origem', 'Destino', 'Distancia (KM)']
+        ws.append(headers)
+        
+        # Adjust column widths
+        for col in ['A', 'B', 'C', 'D', 'E', 'F', 'G']:
+            ws.column_dimensions[col].width = 15
+        ws.column_dimensions['C'].width = 20 # CPF
+        
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=modelo_importacao_viagens.xlsx'
+        wb.save(response)
+        return response
+
+from .forms import ViagemImportForm
+
+class ImportTravelView(FormView):
+    template_name = 'logistics/import_travels.html'
+    form_class = ViagemImportForm
+    success_url = reverse_lazy('viagem_list')
+    
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('login')
+        return super().dispatch(request, *args, **kwargs)
+    
+    def form_valid(self, form):
+        excel_file = form.cleaned_data['arquivo_excel']
+        try:
+            wb = openpyxl.load_workbook(excel_file)
+            ws = wb.active
+            
+            created_count = 0
+            errors = []
+            
+            # Skip header row
+            rows = list(ws.iter_rows(min_row=2, values_only=True))
+            
+            for row_idx, row in enumerate(rows, start=2):
+                if not any(row): continue
+                
+                try:
+                    if len(row) < 7:
+                        errors.append(f"Linha {row_idx}: Dados incompletos.")
+                        continue
+                        
+                    data_val, hora_val, cpf_val, placa_val, origem_val, destino_val, distancia_val = row[:7]
+                    
+                    if not data_val or not hora_val or not cpf_val or not placa_val:
+                        errors.append(f"Linha {row_idx}: Campos obrigatórios faltando.")
+                        continue
+
+                    # Clean data
+                    cpf = str(cpf_val).replace('.', '').replace('-', '').strip()
+                    if len(cpf) < 11: cpf = cpf.zfill(11)
+                         
+                    placa = str(placa_val).replace('-', '').strip().upper()
+                    
+                    # Search valid foreign keys
+                    motorista = Motorista.objects.filter(cpf=cpf).first()
+                    if not motorista:
+                        errors.append(f"Linha {row_idx}: Motorista com CPF {cpf} não encontrado.")
+                        continue
+                        
+                    veiculo = Veiculo.objects.filter(placa=placa).first()
+                    if not veiculo:
+                        errors.append(f"Linha {row_idx}: Veículo com placa {placa} não encontrado.")
+                        continue
+                    
+                    Viagem.objects.create(
+                        data=data_val,
+                        hora_saida=hora_val,
+                        motorista=motorista,
+                        veiculo=veiculo,
+                        origem=str(origem_val),
+                        destino=str(destino_val),
+                        distancia=float(distancia_val) if distancia_val else 0
+                    )
+                    created_count += 1
+                    
+                except Exception as e:
+                    errors.append(f"Linha {row_idx}: Erro - {str(e)}")
+            
+            if created_count > 0:
+                messages.success(self.request, f"{created_count} viagens importadas com sucesso!")
+            
+            if errors:
+                for err in errors[:5]:
+                    messages.warning(self.request, err)
+                if len(errors) > 5:
+                    messages.warning(self.request, f"E mais {len(errors)-5} erros.")
+                    
+        except Exception as e:
+            messages.error(self.request, f"Erro ao ler arquivo: {str(e)}")
+            return self.form_invalid(form)
+            
+        return super().form_valid(form)
+

@@ -2,6 +2,12 @@ from django import forms
 from django.contrib import messages
 from .models import Viagem, Veiculo, Manutencao
 
+class ViagemImportForm(forms.Form):
+    arquivo_excel = forms.FileField(
+        label='Arquivo Excel',
+        help_text='Selecione o arquivo .xlsx com os dados das viagens'
+    )
+
 class ViagemForm(forms.ModelForm):
     km_atual = forms.DecimalField(
         max_digits=10,
@@ -29,7 +35,10 @@ class ViagemForm(forms.ModelForm):
         for field_name, field in self.fields.items():
             if field_name not in ['data', 'hora_saida']:
                 field.widget.attrs['class'] = 'form-control'
-    
+        
+        # Add Bootstrap class for FileInput if present (though ViagemForm doesn't use it, ViagemImportForm does)
+        # But this is ViagemForm __init__. Checking ViagemImportForm is separate.
+
     def clean(self):
         cleaned_data = super().clean()
         veiculo = cleaned_data.get('veiculo')

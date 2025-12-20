@@ -49,6 +49,7 @@ class Viagem(models.Model):
     origem = models.CharField(max_length=200)
     destino = models.CharField(max_length=200)
     distancia = models.DecimalField(max_digits=10, decimal_places=2, default=0, validators=[MinValueValidator(0)])
+    km_final = models.DecimalField(max_digits=10, decimal_places=2, default=0, validators=[MinValueValidator(0)], verbose_name="KM Atual (Final)")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -48,5 +48,9 @@ urlpatterns = [
     path('multas/pdf/', views.multa_pdf, name='multa_pdf'),
     path('manutencoes/pdf/', views.manutencao_pdf, name='manutencao_pdf'),
     path('viagens/pdf/', views.viagem_pdf, name='viagem_pdf'),
+    
+    # Import
+    path('viagens/importar/', views.ImportTravelView.as_view(), name='viagem_import'),
+    path('viagens/modelo/', views.DownloadTravelTemplateView.as_view(), name='viagem_download_template'),
 ]
 
